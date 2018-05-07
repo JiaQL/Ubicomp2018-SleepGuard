@@ -1,0 +1,60 @@
+\documentclass[acmlarge]{acmart}
+
+\input{preamble}
+
+\begin{document}
+
+\title{\systemname: Capturing Rich Sleep Information using Smartwatch Sensing Data}
+
+%\author{Liqiong Chang, Jiaqi Lu, Ju Wang, Xiaojiang Chen, Dingyi Fang, Zhanyong Tang}
+%\orcid{1234-5678-9012-3456}
+%\affiliation{
+%	\institution{Northwest University}
+%	\country{China}} \email{{changliqiong, jqlu, xjchen, dyf, zytang}@nwu.edu.cn}
+%
+%\author{Petteri Nurmi, Zheng Wang}
+%\affiliation{
+%	\institution{Lancaster University}
+%	\country{United Kingdom}} \email{{p.nurmi, z.wang}@lancaster.ac.uk}
+
+%NOTE: This is supposed to be anonymous review.
+
+\input{abstract}
+
+\begin{CCSXML}
+	<ccs2012>
+	<concept>
+	<concept_id>10003120.10003138</concept_id>
+	<concept_desc>Human-centered computing~Ubiquitous and mobile computing</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Human-centered computing~Ubiquitous and mobile computing}
+
+\keywords{Smartwatch, Sleep events, Sensing}
+
+%\thanks{This work is partially supported by the National Natural Science Foundation of China under Grant Nos. 61572402, 61672428, 61772422 and 61572347.}
+
+\maketitle
+
+%\renewcommand{\shortauthors}{L. Chang, J. Lu, J. Wang, X. Chen, D. Fang, Z. Tang, P. Nurmi, Z. Wang}
+
+
+
+\input{1introduction.tex}
+%ZW: I have commented out the motivation section as it reads like related work.
+%\input{motivation.tex}
+%\input{2overview.tex}
+\input{3design.tex}
+\input{setup}
+\input{4experiment.tex}
+\input{discussion.tex}
+\input{5related.tex}
+\input{conclusions}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sleep_ref}
+
+\end{document}
