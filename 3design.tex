@@ -226,7 +226,7 @@ when the hand is placed on the abdomen or the chest, but not other part of the b
 
 However, there is no straightforward way to detect a respiratory event as no smartwatch sensor provides such information. Instead, we
 calculate the power spectral density (PSD) of the collected accelerometer data. We use the PSD as a proxy to detect respiratory events,
-which are then use to determine whether the hand was placed on the abdomen or the chest. Fig. \ref{fig:PSD} provides an empirical evidence
+which are then used to determine whether the hand was placed on the abdomen or the chest. Fig. \ref{fig:PSD} provides an empirical evidence
 to support our design choice. It shows the PSG for one of our pilot study user when his hand is placed on the chest. Here we calculate the
 PSD for the accelerometer data collected from the x, y and z directions. We can see from the diagram that there is a large peak located at
 around 0.25Hz (highlighted in the diagrams) when a respiratory event is detected (which is labeled by watching the video). This peak
