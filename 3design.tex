@@ -27,12 +27,26 @@
 \end{figure*}
 
 
+\subsection{Training Data\label{sec:trainingdata}}
+\textcolor{cyan}{ The training examples used to train our algorithms and to determine the algorithm parameters are collected from 10 users
+(5 males and 5 females), aging between 16 and 60. Our testing users were asked to wear a smartwatch to sleep and collected the sensor data
+while they were sleeping. Every testing user contributes 10 nocturnal sleep data over a two-week period. We stress that these users are
+different from those took part in our evaluation} (Section~\ref{sec:evalusers}).
+
 \subsection{Detecting Sleep Postures and Movements}
 
-One's sleeping position, also referred to as {\em sleep posture}, and the extent of body movements are important factors in determining overall sleep quality. Suboptimal posture has been shown to affect the severity of sleep disorders and is widely used in medical diagnoses to analyse effects of sleep disorders~\cite{oksenberg1998effect,eiseman2012impact} while having a good sleep posture has been shown to correlate with subjective assessments of sleep quality~\cite{dekoninck83sleep}. Similarly, high degree of body movements during sleep likely reflects restlessness, which results in poor sleep quality. {\systemname} uses motion sensors (accelerometer, gyroscope, and orientation sensor) to capture user's sleep posture and habits. In the following we detail the techniques we use for capturing the body posture and movements.  {\systemname}, currently supports the 4 basic sleep postures (see Fig.~\ref{fig:BodyPosture}); 3 hand positions (see Fig.~\ref{fig:HandPosition}); 6 types of body rollovers (see Fig.~\ref{fig:BodyRollover} for an example); and 3 types of body micro movements. %These events comprehensively and highly relate to the sleep stages and quality.
+One's sleeping position, also referred to as {\em sleep posture}, and the extent of body movements are important factors in determining
+overall sleep quality. Suboptimal posture has been shown to affect the severity of sleep disorders and is widely used in medical diagnoses
+to analyse effects of sleep disorders~\cite{oksenberg1998effect,eiseman2012impact} while having a good sleep posture has been shown to
+correlate with subjective assessments of sleep quality~\cite{dekoninck83sleep}. Similarly, high degree of body movements during sleep
+likely reflects restlessness, which results in poor sleep quality. {\systemname} uses motion sensors (accelerometer, gyroscope, and
+orientation sensor) to capture user's sleep posture and habits. In the following we detail the techniques we use for capturing the body
+posture and movements.  {\systemname}, currently supports the 4 basic sleep postures (see Fig.~\ref{fig:BodyPosture}); 3 hand positions
+(see Fig.~\ref{fig:HandPosition}); 6 types of body rollovers (see Fig.~\ref{fig:BodyRollover} for an example); and 3 types of body micro
+movements. %These events comprehensively and highly relate to the sleep stages and quality.
 
 
-\subsubsection{Sleep Posture Detection\label{sec:sleeppdet}}
+\subsubsection{\textcolor{cyan}{Sleep Posture Detection}\label{sec:sleeppdet}}
 
 Dreaming and sleep quality are associated with underlying brain functions, which in turn are affected by body posture~\cite{posture2004}.
 Sleep posture also varies across individuals and should fit personal and physical needs of the individual~\cite{posture2016,posture2017}.
@@ -43,8 +57,8 @@ avoiding potential harm. \systemname captures the four basic sleep postures, whi
 is illustrated in Fig.~\ref{fig:BodyPosture}. However, detecting these postures using a single wrist sensor is non-trivial because the
 sensor cannot accurately track the entire body movement. We observe that the arm position strongly correlates to the sleep postures, i.e.,
 the arm is typically located in a specific, stable location for a given sleep posture. This observation suggests that we can first identify
-the user's arm position and the duration of a specific arm location, and then map the information to a sleep posture. Later in this paper
-(\FIXME{Section xx}), we show that our approach can achieve a high accuracy in identifying sleep postures.
+the user's arm position and the duration of a specific arm location, and then map the information to a sleep posture. Later in this paper,
+we show that our approach can achieve a high accuracy in identifying sleep postures.
 
 
 
@@ -224,37 +238,45 @@ breathing when it is placed on the abdomen or the chest. Our experimental data s
 when the hand is placed on the abdomen or the chest, but not other part of the body (such as the shoulder).
 
 
-However, there is no straightforward way to detect a respiratory event as no smartwatch sensor provides such information. Instead, we
-calculate the power spectral density (PSD) of the collected accelerometer data. We use the PSD as a proxy to detect respiratory events,
-which are then used to determine whether the hand was placed on the abdomen or the chest. Fig. \ref{fig:PSD} provides an empirical evidence
-to support our design choice. It shows the PSG for one of our pilot study user when his hand was placed on the chest. Here we calculate the
-PSD for the accelerometer data collected from the x, y and z directions. We can see from the diagram that there is a large peak located at
-around 0.25Hz (highlighted in the diagrams) when a respiratory event is detected (which is labeled by watching the video). This peak
-corresponds to the average respiratory frequency of an adult (0.2Hz to 0.47Hz)~\cite{Breath_frequence}, suggesting that the PSD reading can
-be used as a proxy to detect respiratory events. \systemname thus exploits the PSD to detect a respiratory event if its peak value falls
-within the range of 0.2Hz (corresponding to 12 breathes per minute) and 0.47Hz (corresponding to 28 breathes per minute).
+To examine if the accelerometer data are affected by the respiration because the hand is placed on the abdomen or the chest, we calculate
+the power spectral density (PSD) of the collected accelerometer data. We then check if there is any peak value matches the human
+respiratory frequency. A match indicates that the hand is affected by a respiratory event and hence the hand is likely to be placed on
+either the abdomen or the chest. Fig. \ref{fig:PSD} provides an empirical evidence to support our design choice. It shows the PSG for one
+of our pilot study user when his hand was placed on the chest. Here we calculate the PSD for the accelerometer data collected from the x, y
+and z directions. We can see from the diagram that there is a large peak located at around 0.25Hz (highlighted in the diagrams) when a
+respiratory event is detected (which is labeled by watching the video). This peak corresponds to the average respiratory frequency of an
+adult (0.2Hz to 0.47Hz)~\cite{Breath_frequence}, suggesting that the PSD reading can be used as a proxy to detect respiratory events.
+\systemname thus exploits the PSD to detect if the hand is placed on the abdomen or the chest by checking if there is any peak value of PSD
+falls within the range of 0.2Hz (corresponding to 12 breathes per minute) and 0.47Hz (corresponding to 28 breathes per minute).
 
 With the PSD-based method in place (which tells us if the hand is placed on the abdomen or the chest or elsewhere), we then use again a KNN
 classifier to make a binary decision to determine if the hand is placed on the abdomen or the chest based on the rotation angle readings
 (see Fig.~\ref{Bodyhand} b and c). Like the head position model, the training samples for the KNN model are also collected from our pilot
 study users -- where each training example includes the rotation angle readings when the hand is either placed on the abdomen or the chest.
 
-\paragraph{Judging REM and NREM stages.}
-In addition, we found that the extent of body movements can be used to judge the amplitude of respiration. Moreover, we know that when
-people sleep in the REM stage, their respiratory amplitude is smaller than in the other stages~\cite{respiratory1982}. Hence, we can
-roughly determine the user's current sleep stage based on the respiratory amplitude. Respiratory amplitude is only an indicator of the
-division of the sleep stage and we can not regard it as a basis for final judgement, but it serves as an early reference that helps later
-phases of the sleep stage detection. Under normal circumstances, the chest movement amplitude is smaller than abdominal movement amplitude.
-However, in different sleep stages, the respiration amplitudes are different~\cite{respiratory}. It is likely that there is a situation:
-the chest movement amplitude in the NREM stages is close to the abdominal movement amplitude in the REM sleep stage. As a result, the
-threshold based method cannot work. At this time, we need to combine it with the position of the hand we detected with the trajectory
-before. Through the above steps, we have been able to determine whether the hands are on the chest or abdomen, and then we can go further
-to determine the extent of breathing according to the degree of body ups and downs, and we can roughly infer the sleep stage. Now we take
-the case of hands on the abdomen as an example.
+\subsection{Labeling the Eye Movement Stages}
+
+We also found that the extent of body movements can be used to judge the amplitude of respiration, which in turns allows us to detect
+rapid-eye-movement (REM) and non-rapid-eye-movement (NREM) stages. This is based on the prior study showing that when people sleep in the
+REM stage, their respiratory amplitude is smaller than that in the other stages~\cite{respiratory1982}. Hence, we can roughly determine the
+user's current sleep stage based on the respiratory amplitude. Respiratory amplitude is only an indicator of the division of the sleep
+stage and we can not regard it as a basis for final judgement, but it serves as an early reference that helps later phases of the sleep
+stage detection. Under normal circumstances, the chest movement amplitude is smaller than abdominal movement amplitude. However, in
+different sleep stages, the respiration amplitudes are different~\cite{respiratory}. It is likely that there is a situation: the chest
+movement amplitude in the NREM stages is close to the abdominal movement amplitude in the REM sleep stage. As a result, the threshold based
+method cannot work. At this time, we need to combine it with the position of the hand we detected with the trajectory before. Through the
+above steps, we have been able to determine whether the hands are on the chest or abdomen, and then we can go further to determine the
+extent of breathing according to the degree of body ups and downs, and we can roughly infer the sleep stage. Now we take the case of hands
+on the abdomen as an example.
 
 
 
-Even when the hand is placed on the abdomen, due to minor changes in the exact location of the user's hand, the location of intensity of accelerometer fluctuations caused by respiration varies. Hence, we cannot use the amplitude information to determine true respiratory amplitude directly. This problem is illustrated in Fig.~\ref{fig:breath_ok1}, where (a) and (b) contain triaxial acceleration measurements at different locations of the abdomen during REM sleep stage, and in (c) which consists of acceleration data for NREM stages at the same approximate position as in (a). We can see that when hand on the abdomen, but the location is different, even in the same location, we can not directly judge the respiration amplitude using only the amplitude of the three axes of the acceleration.
+    Even when the hand is placed on the abdomen, due to minor changes in the exact location of the user's hand, the location of intensity of
+accelerometer fluctuations caused by respiration varies. Hence, we cannot use the amplitude information to determine true respiratory
+amplitude directly. This problem is illustrated in Fig.~\ref{fig:breath_ok1}, where (a) and (b) contain triaxial acceleration measurements
+at different locations of the abdomen during REM sleep stage, and in (c) which consists of acceleration data for NREM stages at the same
+approximate position as in (a). We can see that when hand on the abdomen, but the location is different, even in the same location, we can
+not directly judge the respiration amplitude using only the amplitude of the three axes of the acceleration.
 
 \begin{figure}[!t]
 \centering
@@ -281,13 +303,62 @@ $\theta$, $\sigma$ and $\gamma$ are the x, y and z axis data of the orientation 
   \caption{Acceleration data for different sleep stages.}\label{fig:cordi}
 \end{figure}
 
-The two graphs on the left of Fig.~\ref{fig:cordi} show the same acceleration data as has been used in (a) and (c) of Fig.~\ref{fig:breath_ok1}, respectively, whereas the two right-most graphs correspond to the data after coordinate system alignment.  We can see that prior to align the measurements, we cannot effectively distinguish respiratory amplitude of REM and NREM stages from the acceleration amplitude. After coordinate alignment, the respiratory amplitudes are clearly visible from the z-axis data. We then calculate the variance of z-axis acceleration and use it as a feature to measure the intensity of the fluctuation in a signal, with larger variance corresponding to greater breath amplitude. Note that we cannot use the sum or magnitude of the z-axis as a measure of intensity as the measurements remain affected by gravity. \textcolor{blue}{We then trained a classifier based k-nearest neighbor model (with k = 1) using this feature when the hand is placed on the abdomen and on the chest under both REM stage and NREM stages to determine a mapping from current respiratory amplitude to placement. Here, we define the respiratory amplitude in the NREM stage as large respiratory amplitude, and the respiratory amplitude in the REM stage as normal respiratory amplitude. As for the acquisition of sleep stage, we confirm the label of it when both Fitbit and {\systemname} reach a consensus. At the same time, We also take into account video recorded by the camera to manually label part of the respiratory. The combination of these three kinds of equipment can enable us to obtain real and accurate data as much as possible.  As classifier we used a decision stump which was trained on 200 sets of acceleration data (100 sets of these from the larger respiratory amplitude and the rest of sets from the normal respiratory amplitude ) from 10 volunteers, who are randomly recruited by us aged 16 to 60 years old. They are asked to wear a smartwatch to sleep so that we can collect sensor data during sleep. Every volunteer contributes 10 nocturnal sleep data. And we also use these 100 sets of nocturnal sleep-related data as training data for the parameters in our other detection algorithms to enable us get these parameters. The resulting threshold for the acceleration variance is around 15 when the hand on the abdomen, and around 4 when the hand is placed on the chest.}
+The two graphs on the left of Fig.~\ref{fig:cordi} show the same acceleration data as has been used in (a) and (c) of
+Fig.~\ref{fig:breath_ok1}, respectively, whereas the two right-most graphs correspond to the data after coordinate system alignment.  We
+can see that prior to align the measurements, we cannot effectively distinguish the respiratory amplitude of REM and NREM stages from the
+acceleration amplitude. After coordinate alignment, the respiratory amplitudes are clearly visible from the z-axis data. We then calculate
+the variance of z-axis acceleration and use it as a feature to measure the intensity of the fluctuation in a signal, with larger variance
+corresponding to greater breath amplitude. Note that we cannot use the sum or magnitude of the z-axis as a measure of intensity as the
+measurements remain affected by gravity.
 
+\textcolor{cyan}{ We use the respiratory amplitude to detect whether the user is at the REM or not. Specifically, we calculate the
+respiratory amplitude when the hand is found to be placed on the abdomen or the chest (\systemname can only detect respiratory events when
+the hand is placed one of these two positions). We then use a KNN classifier to find from our training examples, which training example is
+most similar to the input respiratory amplitudes collected from the x, y, and z directions. The similarity is measured by calculating the
+Euclidean distance on the 3-dimensional feature space. We then use the label (either REM or NREM) associated with the nearest training
+example as the classification outcome.}
+
+\textcolor{cyan}{ To generate the training examples, we first use our hand position recognition algorithm described in
+Section~\ref{sec:handpr} to detect, from our training dataset (see (Section~\ref{sec:trainingdata}), wheter the hand was placed on the
+abdomen or the chest to calculate the respiratory amplitude. We can consider the user is at either (1) the NREM stage if a large repository
+amplitude (i.e., the amplitude value is not less than 15) is detected, or (2) the REM stage if a normal repository amplitude (i.e., the
+amplitude value is not greater than 4) is detected. These thresholds are chosen based on prior study\FIXME{ \cite{}}. To remove the noises
+of the training data, we only use training examples where both our approach and Fitbit reach the consensus on the eye movement stage. We
+also manually inspect the recorded videos to label the stage from our training data.}
+
+
+
+%\textcolor{blue}{We then trained a classifier based k-nearest neighbor model (with k = 1) using this feature when the hand is placed on the
+%abdomen and on the chest under both REM stage and NREM stages to determine a mapping from current respiratory amplitude to placement. Here,
+%we define the respiratory amplitude in the NREM stage as large respiratory amplitude, and the respiratory amplitude in the REM stage as
+%normal respiratory amplitude. As for the acquisition of sleep stage, we confirm the label of it when both Fitbit and {\systemname} reach a
+%consensus. At the same time, We also take into account video recorded by the camera to manually label part of the respiratory. The
+%combination of these three kinds of equipment can enable us to obtain real and accurate data as much as possible.  As classifier we used a
+%decision stump which was trained on 200 sets of acceleration data (100 sets of these from the larger respiratory amplitude and the rest of
+%sets from the normal respiratory amplitude ) from 10 volunteers, who are randomly recruited by us aged 16 to 60 years old.  The resulting
+%threshold for the acceleration variance is around 15 when the hand on the abdomen, and around 4 when the hand is placed on the chest.}
+%
 
 
 \subsubsection{Body rollover counts \label{sec:bodyrollover}}
 
-Under normal circumstances, people usually rollover their body around 20-45 times a night. The main function of body rollovers is simply to maintain a comfortable sleeping position as maintaining the same position for prolonged period will result in muscular tension due to hindered blood supply, which can also lead to local numbness~\cite{rollover2014}. So body rollover is another key indicator about the sleep quality. {\systemname} can detect the number of body rollovers, which can get some reflections of sleep status and the roll-over frequency can also help us to classify the sleep stage~\cite{rollover2007}. In general, there are six cases: four posture transition cases between the supine posture and lateral (left or right) posture, and two posture transitions between the left lateral posture and right lateral posture. Fig. \ref{fig:BodyRollover} shows the case when the body moves from the left side to the right side. \textcolor{blue}{The most intuitive way to detect the body rollover events is to detect the direction of rotation of the arm (the rotation angle measured by the gyroscope). However, there is a big drawback to this method. In the actual sleep process, the trajectory of the arm is very difficult to be predicted, especially for different users, and even if there is a slight difference in the starting position of the same sleeping position, it will cause the rotation angle to change and it is easy to cause misjudgment, so this method is not feasible. Therefore, we need to find a feature that is more representative of the body rollover events. And  we observe different change patterns about the tilt angle values, when the rollover occurs.} Specifically, the angle values of three different axes are on the falling edge or rising edge simultaneously during a very short time period. Fig. \ref{fig:LeftToRight} -- Fig. \ref{fig:RightToLeft} shows the value changes under different body rollover cases. To this end, a naive method to detect rollovers would be to rely on changes in angle measurements. However, this method suffers a very large error since other hand movements will also induce a similar change.
+Under normal circumstances, people usually rollover their body around 20-45 times a night. The main function of body rollovers is simply to
+maintain a comfortable sleeping position as maintaining the same position for prolonged period will result in muscular tension due to
+hindered blood supply, which can also lead to local numbness~\cite{rollover2014}. So body rollover is another key indicator about the sleep
+quality. {\systemname} can detect the number of body rollovers, which can get some reflections of sleep status and the roll-over frequency
+can also help us to classify the sleep stage~\cite{rollover2007}. In general, there are six cases: four posture transition cases between
+the supine posture and lateral (left or right) posture, and two posture transitions between the left lateral posture and right lateral
+posture. Fig. \ref{fig:BodyRollover} shows the case when the body moves from the left side to the right side.
+%
+\textcolor{cyan}{The most intuitive way for detecting body rollover events is to estimate the rotation direction of the arm based on the
+rotation angle given by the gyroscope. However, doing so is non-trivial because different users can exhibit drastically different patterns
+for arm rotations; and the subtle changes in the starting arm position for the same sleeping posture could lead to a misprediction. As an
+alternative to the rotation angle, we find that the tilt angles to be useful for this task because they strongly correlate to a body
+rollover event. This correlation thus enables us to effectively translate the change of the tilt angle to a body rollover event to count
+the occurrence of such events.} Specifically, the angle values of three different axes are on the falling edge or rising edge
+simultaneously during a very short time period. Fig. \ref{fig:LeftToRight} -- Fig. \ref{fig:RightToLeft} shows the value changes under
+different body rollover cases. To this end, a naive method to detect rollovers would be to rely on changes in angle measurements. However,
+this method suffers a very large error since other hand movements will also induce a similar change.
 
 \begin{figure*}[!t]
 %\centering
@@ -326,15 +397,25 @@ Under normal circumstances, people usually rollover their body around 20-45 time
 \end{minipage}
 \end{figure*}
 
-To deal with this challenge, we incorporate the body postures to improve the detection accuracy. As shown in Fig. \ref{fig:BodyRollover}, the body postures are different before and after the rollover. Therefore, after we detect the time when the angle values changes, we term the time as a possible rollover time point. Then we use the sleep posture classification algorithm to determine whether the body postures are the same or not over a period of time before and after this point. \textcolor{blue}{If the postures are same, we exclude this time point, otherwise the system detects a body rollover event. In other words, a body rollover event is recorded when the posture changes
-are detected between two time points.} Note that {\systemname} not only counts the number of rollovers, but also reports the exact nature of the rollover event.
+To deal with this challenge, we incorporate the body postures to improve the detection accuracy. As shown in Fig. \ref{fig:BodyRollover},
+the body postures are different before and after the rollover. Therefore, after we detect the time when the angle values changes, we term
+the time as a possible rollover time point. Then we use the sleep posture classification algorithm to determine whether the body postures
+are the same or not over a period of time before and after this point. \textcolor{cyan}{If the postures are the same, we exclude this time
+point, otherwise a body rollover event is found. In other words, a body rollover event is recorded when the posture changes are detected
+between two time points.} Note that {\systemname} not only counts the number of rollovers, but also reports the exact nature of the
+rollover event.
 
 
 \subsubsection{Micro body movement \label{sec:microbo}}
 
 Besides major body movement, such as rollovers, there often are involuntary body movements that can affect sleep quality. With the deepening of sleep, limbs are extremely relaxed, and a little stimulus will produce trembling and micro beating. Such behavior is most likely to occur during the deep sleep stage and the REM stage~\cite{ancoli2003role,Jean2000Sleep}. Therefore, by detecting such micro body movements and distinguish them from large body movements can help us to further analyze the user's sleep stage. In this paper, we are interested in the sleep-related body movements including hand moving, arm raising, and body trembling.
 
-The way of detecting micro movement is different from the method of detecting the body rollover as we first need to consider the influence of inherent accelerometer's noise. In addition to the appropriate data preprocessing, we need to set an appropriate threshold to classify the accelerations of micro body movements and noises. \textcolor{blue}{To set an effective threshold, we conduct extensive experiments on the 10 volunteers who participated in the training of various parameters mentioned above and ensure the accelerometer embedded in smartwatch to calculate the corresponding acceleration variance trace of the micro body movement. We use Moving Average filter with a moving window length of 35 to smooth the acceleration along the three axes,} and calculate Root Sum Square (RSS) to merge them.
+\textcolor{cyan}{One of the challenges in detecting the micro body movements is to cancel the inherent noises brought by the accelerometer.
+To cancel the noises, we apply a moving window to the collected accelerometer data points to minimize the impact of the outliers. To
+determine the size of the moving window, we apply different parameter settings to our training data. We found that a moving widow with a
+size of 35 gives the best average results on our training set. Therefore, we choose to apply a moving window of 35 sample points to the
+collected user data and then calculate Root Sum Square (RSS) for the data points within a window:}
+
 \begin{equation}
       Rss(t) =\sqrt{(acc_x(t))^{2}+(acc_y(t))^{2}+(acc_z(t))^{2}},
 \end{equation}
