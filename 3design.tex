@@ -234,10 +234,10 @@ corresponds to the average respiratory frequency of an adult (0.2Hz to 0.47Hz)~\
 be used as a proxy to detect respiratory events. \systemname thus exploits the PSD to detect a respiratory event if its peak value falls
 within the range of 0.2Hz (corresponding to 12 breathes per minute) and 0.47Hz (corresponding to 28 breathes per minute).
 
-With the PSD-based method in place, we then use again a KNN classifier to take in the changes of the rotation angle readings to determine
-if the hand is placed on the abdomen or the chest. Like the head position model, the training samples for the KNN model are also collected
-from our pilot study users – where each training example includes the rotation angle readings when the hand is either placed on the abdomen
-or the chest.
+With the PSD-based method in place (which tells us if the hand is placed on the abdomen or the chest or elsewhere), we then use again a KNN
+classifier to make a binary decision to determine if the hand is placed on the abdomen or the chest based on the rotation angle readings
+(see Fig.~\ref{Bodyhand} b and c). Like the head position model, the training samples for the KNN model are also collected from our pilot
+study users -- where each training example includes the rotation angle readings when the hand is either placed on the abdomen or the chest.
 
 \paragraph{Judging REM and NREM stages.}
 In addition, we found that the extent of body movements can be used to judge the amplitude of respiration. Moreover, we know that when
