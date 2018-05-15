@@ -27,11 +27,7 @@
 \end{figure*}
 
 
-\subsection{Training Data\label{sec:trainingdata}}
-\textcolor{cyan}{ The training examples used to train our algorithms and to determine the algorithm parameters are collected from 10 users
-(5 males and 5 females), aging between 16 and 60. Our testing users were asked to wear a smartwatch to sleep and collected the sensor data
-while they were sleeping. Every testing user contributes 10 nocturnal sleep data over a two-week period. We stress that these users are
-different from those took part in our evaluation} (Section~\ref{sec:evalusers}).
+
 
 \subsection{Detecting Sleep Postures and Movements}
 
@@ -54,8 +50,8 @@ For example, sleeping in a prone position is unsuitable for people with ailments
 other hand, people can consciously avoid postures that would be beneficial for health and sleep quality~\cite{posture2015}. Having an
 effective way to detect the current posture and track changes in it would thus be essential for estimating overall sleep quality, and
 avoiding potential harm. \systemname captures the four basic sleep postures, which are supine, left lateral, right lateral, and prone. This
-is illustrated in Fig.~\ref{fig:BodyPosture}. However, detecting these postures using a single wrist sensor is non-trivial because the
-sensor cannot accurately track the entire body movement. We observe that the arm position strongly correlates to the sleep postures, i.e.,
+is illustrated in Fig.~\ref{fig:BodyPosture}. Detecting these postures using a single wrist sensor, however, is non-trivial because the
+sensor cannot accurately track movement of the entire body. To accomplish posture detection, we observe that the arm position strongly correlates to the sleep postures, i.e.,
 the arm is typically located in a specific, stable location for a given sleep posture. This observation suggests that we can first identify
 the user's arm position and the duration of a specific arm location, and then map the information to a sleep posture. Later in this paper,
 we show that our approach can achieve a high accuracy in identifying sleep postures.
@@ -96,22 +92,25 @@ To separate sleep postures, {\systemname} considers a set of feasible hand posit
 
 %e use a supervised classifier to  And then we use a supervised learning method to create a sleep posture profile. Specifically, we collect training data to create a mapping (i.e., angle mapping) between the angles and the arm under different positions.
 
-Similarly to SleepMonitor~\cite{sleepmonitor}, we use tilt angles readings from three dimensions to detecte postures. We use a K-nearest
-neighbour (KNN) classifier, where $k$ is set to 1,  to determine which of the targeting postures that a input feature vector corresponds
-to. To determine which posture an input feature corresponds to, we find which of the four posture profiles (i.e., a tilt angle value) is
-closest to the input data. The posture profiles used for this task are collected from our pilot study involved 10 users who are different
-from the ones took part in our evaluation. To identify which of the postures the data collected within a time window corresponds to, we
-average all the calculate tilt angle values of that window. To determine which posture an input feature corresponds to, we find which of
-the four posture profiles (i.e., tilt angle values in three dimensions) is closest to the input data. The posture profiles used for this
-task are collected from our pilot study involved 10 users who are different from the ones took part in our evaluation. To identify which of
-the postures the data collected within a time window corresponds to, we average all the calculate tilt angle values of that window in each
-dimension. We then calculate the Euclidean distance of the input values to each of the profiles across the three dimensional to find which
-profile is closest to the input values. We then use the body posture associated with the nearest neighbor as the detection outcome.
+% We use a K-nearest
+%neighbour (KNN) classifier, where $k$ is set to 1,  to determine which of the target postures a input feature vector %corresponds
+%to.
+
+Similarly to SleepMonitor~\cite{sleepmonitor}, we use tilt angles readings from three dimensions to detect postures. To identify which of the postures the data collected within a time window corresponds to, we average all the calculated tilt angle values of that window in each dimension. We then calculate the Euclidean distance of the input values to a set of posture profiles, which are based on measurements collected in a pilot study that involved 10 users (see Sec.~\ref{sec:trainingdata}). We then use the body posture associated with the nearest neighbor as the detection outcome.
+
+%each of the profiles across the three dimensional to find which
+%profile is closest to the input values. 
+
+% To determine which posture an input feature corresponds to, we find which of
+%the four posture profiles (i.e., tilt angle values in three dimensions) is closest to the input data. The posture profiles used for this
+%task are collected from our pilot study involved 10 users who are different from the ones took part in our evaluation. To identify which of
+%he postures the data collected within a time window corresponds to, we average all the calculate tilt angle values of that window in each
+%dimension.
 
 
 
 
-Fig. \ref{fig:posture} shows the angle values of the four sleep postures targeted in this work. This diagram suggests that the tilt angles
+Fig.~\ref{fig:posture} shows the angle values of the four sleep postures targeted in this work. This diagram suggests that the tilt angles
 of three axes have obvious differences. The sleep posture thus can be inferred based on the position of the smartwatch and the created
 angle mapping. However, a limitation of this approach is that the hand positions during supine and prone postures are similar when the hand
 is located on the side of the head (Fig. \ref{fig:Supine} and \ref{fig:Prone}), thus the classification accuracy will be affected.
@@ -610,3 +609,4 @@ Further, to quantize the quality of a sleep, we use the Sleep Quality Report mod
 SQ=\frac{(REM \times 0.5+Light \times 0.75+Deep) \times 100}{REM+Light+Deep}
  \end{equation}
 where, REM, Deep and Light represents the duration time in a sleep process. The range of $SQ$ is from 50 to 100. A high value of $SQ$ shows a good  sleep quality.
+
