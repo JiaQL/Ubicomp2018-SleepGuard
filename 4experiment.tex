@@ -77,14 +77,22 @@ We first test the overall classification performance of different body postures.
 	\end{tabular}
 \end{table}
 
-%To have a deep evaluation about the sleep posture detection, we randomly choose one user to train the classifier. Then we calculate the detection precision and recall across postures. \textcolor{blue}} The values in blocks are the corresponding numbers of four sleep postures from 14 test users. 
+%To have a deep evaluation about the sleep posture detection, we randomly choose one user to train the classifier. Then we calculate the detection precision and recall across postures. \textcolor{blue}} The values in blocks are the corresponding numbers of four sleep postures from 14 test users.
 
 %In conclude, Table \ref{tab:posture} shows the outstanding detection performance.
 
 
 
 \subsubsection{Performance of body rollover counting}
-To verify the efficiency of body rollover detection algorithm, we compare each user's  body rollover number detected by {\systemname} with the groundtruth recorded by camera. The performance is showed in Table \ref{tab:rollver}. We can see that User 3, User 4 and User 13 have an unusually high number of rollovers. For User 3 and User 4, they have difficulty in falling asleep due to the sleep disorder. User 13 needs to rollover frequently because of  his loudly snoring. As we demonstrate in Sec.~\ref{sec:user_survey}, these participants also suffered from poor sleep quality and hence indicate how the information extracted by \systemname can support the detection of sleep problems. For all the 15 users, the detection accuracies are all very high, and the lowest one is still 87\%. Thus {\systemname} can accurately distinguish the large hand movement from the body rollover in bed. Moreover, detecting errors in body rollover events will not have a significant impact on our end result, because the division of  sleep stages is a comprehensive consideration of all the detected features in each stage, such as micro body movement and acoustic events.
+To verify the efficiency of body rollover detection algorithm, we compare each user's  body rollover events detected by {\systemname}
+against the data labeled by watching the video. The performance is showed in Table \ref{tab:rollver}. We can see that User 3, User 4 and
+User 13 have an unusually high number of rollovers. For User 3 and User 4, they have difficulty in falling asleep due to the sleep
+disorder. User 13 needs to rollover frequently because of  his loudly snoring. As we demonstrate in Sec.~\ref{sec:user_survey}, these
+participants also suffered from poor sleep quality and hence indicate how the information extracted by \systemname can support the
+detection of sleep problems. For all the 15 users, the detection accuracies are all very high, and the lowest one is still 87\%. Thus
+{\systemname} can accurately distinguish the large hand movement from the body rollover in bed. Moreover, detecting errors in body rollover
+events will not have a significant impact on our end result, because the division of  sleep stages is a comprehensive consideration of all
+the detected features in each stage, such as micro body movement and acoustic events.
 
 \begin{table}[!thbp]\footnotesize
   %\centering  % 表居中
@@ -94,9 +102,9 @@ To verify the efficiency of body rollover detection algorithm, we compare each u
    \renewcommand\arraystretch{1}{\multirowsetup}{\centering}
         \begin{tabular}{cccccccccccccccc}
         \toprule
-         \textbf{User}    & 1& 2  & 3& 4& 5& 6& 7& 8& 9& 10& 11& 12& 13& 14& 15\\
+         \textbf{Testing User ID}    & 1& 2  & 3& 4& 5& 6& 7& 8& 9& 10& 11& 12& 13& 14& 15\\
         \midrule
-         \rowcolor{Gray}      {\textcolor{blue}{Groundtruth of body rollovers}}  &231&204&442&397&198&101&196&164&193&208&131&205&342&149&156 \\
+             {Labeled \#body rollover}  &231&204&442&397&198&101&196&164&193&208&131&205&342&149&156 \\
                  { Accuracy} &91\%& 94\% &88\%&93\%&96\%&94\%&87\%&90\% &93\% &94\% &92\% &94\% &89\% &90\% &95\%\\
         \bottomrule
  \end{tabular}
@@ -235,7 +243,7 @@ In order to prove that the detected events not only reflect the user's sleep hab
 
 When we detect different sleep stages, we also consider the respiratory amplitude when the hand's position is in the abdomen or chest. To assess the effectiveness of respiration amplitude estimation, we evaluate the performance of the sleep stage detection in two cases, that are with and without taking the respiration amplitude into account. The performance of sleep stage detection is shown in Table~\ref{tab:respiratory}. For three different sleep stages, both the precision and recall values are improved with the help of respiration amplitude estimation. In fact, respiratory frequency can also be used as a feature to help us to detect sleep stages. But in fact  their essence the same. The difference in respiratory amplitude will also affect the difference in respiratory frequency, because when the respiratory amplitude is large, the time taken for one breath will be long, and the frequency of breathing will be slower. In {\systemname}, we choose the respiratory amplitude because the feature is very intuitive.
 
-\begin{table}[!thbp]\footnotesize
+\begin{table}[!t]\footnotesize
 	\centering  % 表居中
 	\renewcommand\arraystretch{0.3}
 	\caption{Effect of respiration amplitude estimation.}\label{tab:respiratory}
@@ -283,7 +291,7 @@ When we detect different sleep stages, we also consider the respiratory amplitud
 We compare {\systemname} with two state-of-the-art work, the sleep detection app Sleep As Android and smartphone-based system Sleep Hunter \cite{gu2016sleep}.  Considering that Sleep As Android can only detect light sleep stage and deep sleep stage, we only compare the performance of these two stages. Table \ref{tab:comparison} shows the detection results.
 As we can see, {\systemname}  performs much better than Sleep As Android and slightly better than Sleep Hunter. This good performance comes from the incorporation of rich and complicated sleep events. Therefore, our system helps users understand their sleep more easily and improve  sleep quality more effectively.
 
-  \begin{table}[!thbp]\footnotesize
+  \begin{table}[!t]\footnotesize
  	\centering  % 表居中
  	\renewcommand\arraystretch{0.3}
  	\caption{Performance of sleep stage detection comparison.}\label{tab:comparison}
@@ -372,14 +380,14 @@ To understand and verify how the additional information captured by \systemname 
   \item Sleep disturbances,
   \item Daytime dysfunction.
 \end{enumerate}
-For the above four items, each one is rated on a 1 to 5 scale. These scores are first summed to yield a total score, which ranges from 0 to 20. Then we merge every five neighbouring scores into one scale and eventually divide the total scores into four levels, recorded as 0, 1, 2 and 3, representing poor, general, good and excellent, respectively. This step is necessary to compare the results of the user survey against the sleep quality estimation provided by \systemname and Fitbit. 
+For the above four items, each one is rated on a 1 to 5 scale. These scores are first summed to yield a total score, which ranges from 0 to 20. Then we merge every five neighbouring scores into one scale and eventually divide the total scores into four levels, recorded as 0, 1, 2 and 3, representing poor, general, good and excellent, respectively. This step is necessary to compare the results of the user survey against the sleep quality estimation provided by \systemname and Fitbit.
 
-%The final sleep quality score comes from the comprehensive scores of above four questionnaires. 
+%The final sleep quality score comes from the comprehensive scores of above four questionnaires.
 
 The 14-days average sleep quality scores of the 15 participates are presented in Table \ref{tab:quality} together with sleep quality estimates obtained from \systemname and Fitbit. For $9$ users, {\systemname}'s assessment of sleep quality perfectly matches the subjective assessments. For the remaining $6$ users, the error is within one scale point, with most of the errors being between $0$ and $1$ (poor and general) and $2$ and $3$ (good and excellent). Compared to Fitbit, the results are slightly better overall, and all errors made by \systemname are in line with those made by Fitbit. Accordingly, our results demonstrate that \systemname is capable of estimating overall sleep quality in line with subjective estimates, as given by the PSQI questionnaire.
  %A potential reason for these discrepancies is that the user feels overall good (or bad) about his/her own sleep but actually still has some neglected problems during sleep, which is detected by the sleep detection device, which is very helpful to the user. So we can find through the user survey these sleep behaviour we detected are indeed effective and beneficial for people, especially for users with sleep problems.}
 	
-%	 and only slightly better than Fitbit's results.However, results of the {\systemname} assessment are similar to those of the user survey. Possible inconsistencies are scores 2 and 3, that is, good and excellent, score 0 and 1, that is, poor and general, and there are few cases in which bad sleep has been assessed as good. These similar results are acceptable. We also found that when the results of the {\systemname} were inconsistent with the results of the user survey, it was consistent with the Fitbit results. 
+%	 and only slightly better than Fitbit's results.However, results of the {\systemname} assessment are similar to those of the user survey. Possible inconsistencies are scores 2 and 3, that is, good and excellent, score 0 and 1, that is, poor and general, and there are few cases in which bad sleep has been assessed as good. These similar results are acceptable. We also found that when the results of the {\systemname} were inconsistent with the results of the user survey, it was consistent with the Fitbit results.
 
 While the results above demonstrate that \systemname is capable of accurately estimating sleep quality, the main benefit from \systemname compared to previous works is not its sleep quality performance but its capability to analyse and capture the {\em root cause} of sleep issues. To demonstrate this, we carried out a follow up analysis where we examined the events captured by \systemname for each of the six users assessing their sleep quality negatively (poor or general subjective quality, i.e., rating 0 or 1 in Table~\ref{tab:quality}). For four of the six users we were able to find clear causes for their poor sleep. For one of the users, \systemname indicated difficulties in falling asleep, which was reflected in a high body rollover count. Further analysis of captured events indicated ambient noise and lighting to be most likely reasons for this participant. Another user complained feeling of numbness in the arm after sleep. Events captured by \systemname showed that this was likely due to bad hand posture as the person tended to put the hand on top of head before sleeping. Third user complained of frequent nightmares. Analysis of \systemname events showed that the person habitually slept on the left side, which has been shown to have higher risk on nightmares~\cite{nightmare}, and often placed a hand on top of the chest, which creates additional pressure and can lead to nightmares. Finally, one of the users mentioned suffering from long-term snoring problems, which we also were able to detect from the events captured by \systemname. The events also highlighted that the person was often sleeping in supine position, which further increases susceptibility to snoring-related problems. Existing systems are only capable of capturing some of these factors influencing sleep quality and thus they are not capable of providing a holistic view of the participant's sleep quality, whereas \systemname is capable of providing very detailed information about sleep events. To further demonstrate the benefits of \systemname compared to previous works, we asked the 15 participants to make appropriate adjustments according to our recommendations and to conduct a return visit survey three weeks later. It was found that some of the users were able to reduce symptoms and to improve their average quality of sleep based on the suggestions.
 
@@ -388,14 +396,24 @@ While the results above demonstrate that \systemname is capable of accurately es
 	
 %		Through {\systemname}'s detecting, one user showed obvious symptoms of the difficulty of falling asleep and an unusually high number of body rollover. Our further analysis revealed that there was excessive light intensity and frequent noise in his sleeping environment. This may have led to the appearance of these symptoms and thus the poor quality of sleep.
 	%we summarized the sleep problems and habit of the 15 volunteers who participated in our system assessment through a questionnaire survey and quality of sleep assessment. Then we found that there is a participant reported that his arm was always paralyzed, and five participants had poor sleep quality. We can find that the reason why the user's arm is numb is his incorrect sleep habits. The results from {\systemname} showed that he always tends to put his hands on his head, and long-term postures like this will inevitably lead to numbness of the arms. For similar situations, we will inform and remind users of their inappropriate postures and habits, and recommend that users should take measures to improve such situations.
-	 
+	
 
 
 %And there is a user reported that he always had a nightmare at night, which led to poor sleep quality. We analyse the results of {\systemname} and found that user has been accustomed to sleep in the left side, and sometimes the hand is habitually placed on the chest. As \cite{nightmare} points that people who sleep on their left side are more at risk of nightmares. And the oppression of the chest by the hand causes the brain to have an ill hallucination, making it extremely easy to make a nightmare. So {\systemname} suggest to the user based on these two possible reasons, and hope that the user can take some special measures to change it, and recommend that the user can take some additional methods, such as listening to some soothing music to relax before sleep. Another user was detected by {\systemname} to be bothered by long-term snoring, as he himself mentioned. We know that the occurrence of snoring is most likely due to improper sleeping posture, and we also detected that the user is accustomed to sleep in a supine position, so on the one hand, {\systemname} suggests that the user try the sleeping position in the side position. On the other hand, if the situation still does not improve very well, it is recommended that the user go to the hospital in time for a corresponding check to avoid snoring caused by certain diseases. In addition, if we detect that some users are accustomed to sleeping in a prone position, we will remind and advise them because the prone position is bad for health.}
 
 %\textcolor{blue}{According to different possible reasons, {\systemname} proposes different reminders and suggestions to users, such as adjusting their sleeping posture, improving the sleeping environment, and consciously avoiding bad sleeping habits. As for how to adjust and avoid them, users can take special, mandatory or medical methods according to their own situation. FAnd it }
-	
-As for the user experience, results from the survey highlighted a strong interest in the information captured by \systemname. In particular, 80\% of participants believe that the detection of sleep posture is very necessary, showing their sleep posture can not only help people to avoid health problems caused by long-term improper sleeping posture, but also help us find out the reasons for the next day's physical discomfort, such as dizziness, muscle soreness may be due to improper sleeping posture. \textcolor{blue}{And there are some users are troubled by snoring. This may be due to improper sleeping posture. We map the detected snoring event and sleeping posture to suggest the user to modify his posture to a suitable posture to reduce the harm caused by long-term snoring.} 60\% of the participants thought it useful to detect the hand position in supine posture, even one user mentioned that he did often have nightmares and our system found his hand was often placed on his chest, and then {\systemname} could remind him that he should take some measures to avoid such a position and thus reduce the poor sleep quality that nightmare brings. Only 20\% of participants found it useful to calculate the number of body rollover. However, detection of rollovers is useful in segmenting sleep stages. Furthermore, body rollover counts could be used to derive additional information to the user, such as how restless or peaceful the sleep has been overall.
+\paragraph{User experience} Results from our user survey highlighted a strong interest in the information captured by \systemname. In particular, 80\% of
+participants believe that the detection of sleep posture is very necessary, showing their sleep posture can not only help people to avoid
+health problems caused by long-term improper sleeping posture, but also help us find out the reasons for the next day's physical
+discomfort, such as dizziness, muscle soreness may be due to improper sleeping posture. \textcolor{cyan}{Some of our testing users were
+suffering from snoring due to the improper sleeping posture. \systemname is able to correlate the detected snoring events and sleeping
+postures to suggest one of such testing users to try a better posture to reduce the impact of long-term snoring.} Among all our testing
+users, 60\% of the participants found \systemname to be useful in detecting detect the hand position in then supine posture. One of the
+testing user specially mentioned that he often had nightmares and \systemname reveals that his hand was often placed on his chest. Based on
+this finding, we then advised the user to avoid such a position to reduce the change of having a nightmare. Furthermore, while 20\% of our
+testing users found counting the body rollover events to be useful, such information is essential for segmenting sleep stages. Furthermore,
+body rollover counts could be used to derive additional information to the user, such as how restless or peaceful the sleep has been
+overall.
 
 
 \begin{table} \footnotesize
