@@ -544,7 +544,13 @@ So we can use $EH$ and $EL$ to represent the high and low threshold of short-ter
     EL=\beta \times DE+E_n,
 \end{equation}
 
- \textcolor{blue}{$\alpha$ and $\beta$ are the multiplier factor of the energy value DE. In order to set the energy threshold for detecting the start and end points of the speech signal, we first need to consider that this threshold must be greater than the energy of the noise signal ($E_n$) to ensure that the noise is filtered out. And then we need to get select the appropriate $\alpha$ and $\beta$ to ensure that we get the proper double threshold to accurately detect the start and end points. Specifically, we used the nighttime sound data of 10 volunteers who participated in training to train the multiplier factor of the energy value DE of the speech signal throughout the frame. We vary $\alpha$ from 0.1 to 0.5 and $\beta$ from 0.01 to 0.09, eventually set $\alpha$ to be 0.1 and $\beta$ to be 0.06, which achieves the best detection performance.}
+ \textcolor{cyan}{where $\alpha$ and $\beta$ are the multiplier factors of the energy value $DE$.}
+
+
+\textcolor{cyan}{ Here, we need to choose the right values for $\alpha$ and $\beta$ to ensure
+ that we can accurately detect the start and end points of a speech signal. To that end, we use the nighttime sound data from our training dataset to determine $\alpha$ and $\beta$.
+ Specifically, we tested $\alpha$ using values ranging between 0.1 and 0.5, and $\beta$ using values ranging between 0.01 and 0.09. We found that setting $\alpha$ to  0.1 and $\beta$ to  0.06 gives the best overall results in our training dataset.
+ }
 
  Moreover, in order to avoid the interference of sudden noise, we set the minimum length of the signal segment and count the length of the signal during the search for the start and end point. Finally, if the signal length is less than the set minimum, it is considered as a noise segment. The results of the start-point and end-point detection are shown in Fig. \ref{acoustic}, we calculate the length of each speech segment and calculate their averages as the duration of the acoustic event. Last, we count the number of peak points to determine whether it meets the third key observation or not.
 
