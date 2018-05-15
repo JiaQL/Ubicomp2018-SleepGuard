@@ -440,7 +440,7 @@ then use the change of accelerometer reading to distinguish between the body tre
 first-order derivative of accelerometer data to find out the peak of the acceleration data.  If the peak is great than 1.5 and the duration
 of the movement took between 0.8 and 1.2 second, a body trembling is detected; if the peak is less than 1 and the duration of the movement
 took between 0.8 and 1.2 second, a hand movement is detected; otherwise, if the duration of the movement took between 1.5 and 2 second, an
-arm rising is detected. These thresholds are determined from our training data.}
+arm rising is detected. These thresholds are empirically determined from our training data.}
 
 %\textcolor{blue}{In order to distinguish micro-body movements, including hand movement, arm raising and body trembling, it is very
 %intuitive to detect based on the duration of the movement, because we find that the durations of these movements are significantly
@@ -469,13 +469,14 @@ arm rising is detected. These thresholds are determined from our training data.}
 
 
 \subsection{Detecting Acoustic Events \label{sec:acoustic}}
-Acoustic events during sleep, such as snore, cough and somniloquy, can reflect and affect user's sleep quality and physical health. For example, snore is one of the possible symptoms of cerebral infarction patients.  And long-term snoring can also have a serious impact on health and sleep. It can cause behind sleep apnea or narcolepsy, a sleeping disorder~\cite{snoring2016,snoring2013}. And when there is a cough, the human cerebral cortex cells are always in an excited state, limiting the depth of sleep, allowing only short sleep between wakefulness, like many other sleep disruptions. {\systemname} can detect these different acoustic events, including snore, cough and somniloquy.
-\textcolor{blue}{Different from traditional parameters based on acoustic classification algorithm~\cite{gu2016sleep}, which is based on
-multi-dimensional signal feature extraction methods to detect, which will lead to high complexity of the algorithm. To avoid this problem,
-we directly perform physical signals detection and recognition by mining the essential characteristics of events. In other words, we
-exploit the inherent characteristics of different acoustic events and design a lightweight algorithm for effective
-classification.}%Different from traditional parameters based acoustic classification algorithm~\cite{gu2016sleep}, we exploit the inherent
-characteristics of different acoustic events and design a lightweight algorithm for effective classification.
+Acoustic events during sleep, such as snore, cough and somniloquy, can reflect and affect user's sleep quality and physical health. For
+example, snore is one of the possible symptoms of cerebral infarction patients.  And long-term snoring can also have a serious impact on
+health and sleep. It can cause behind sleep apnea or narcolepsy, a sleeping disorder~\cite{snoring2016,snoring2013}. And when there is a
+cough, the human cerebral cortex cells are always in an excited state, limiting the depth of sleep, allowing only short sleep between
+wakefulness, like many other sleep disruptions. {\systemname} can detect these different acoustic events, including snore, cough and
+somniloquy. \textcolor{cyan}{ Classical acoustic algorithms use multi-dimensional features to detect acoustic events from a complex
+environment~\cite{gu2016sleep}. By contrast, We tailor our design to the problem domain to derive a simpler yet effective acoustic
+detection algorithm, by exploiting the characteristics of the different events that we target.}
 
 \begin{figure*}[!t]
 \centering
@@ -519,7 +520,17 @@ It indicates the number of times, which the acoustic signal waveform passes thro
 \end{itemize}
 In conclusion, the ``interval'', ``duration'' and ``frequency'' of acoustic events can be used as three unique features. Based on the above three observations, our acoustic event recognition algorithm involves the following two steps. First, in order to estimate the interval and frequency of an acoustic event, we perform the peak detection. We use the short-term average energy to calculate the peak value of the acoustic signal. When the peak exceeds a certain threshold, such as 3 dB in this paper, we record the position of each peak and calculate the interval between two consecutive peaks. Next, we can estimate the frequency of an acoustic event by counting the number of peaks over a time window. Second, to estimate the duration of the acoustic event, we perform the start-point and end-point detection.
 
-Traditional end-point detection algorithm \cite{stowell2015detection}, however, uses a fixed double threshold and must be obtained by a large number of data samples, which has two drawbacks. First, the fixed double threshold may cause error detection at the beginning of acoustic event. Second, the requirement of a large number of data samples would lead to large system latency. \textcolor{blue}{To deal with those problems, we introduce an improved end-point detection method, which does not require pre-sampling learning to obtain the threshold parameters. Instead, it utilizes the information of each signal to be detected to perform threshold estimation, which not only reduces the number of data samples and the costs of learning but also leads to higher detection accuracy.} The proposed method has a adaptive threshold, in detail, Since the first few frames and the last few frames are mostly mute or background noise, we select the first five frames and the last five frames to calculate their short-term energy, which are denoted as $E_s$ and $E_e$, respectively. And then the two are combined to obtain the mean $E_n$ as the estimated energy value of the noise segment.Let the maximum value of the short-term energy over all frames denoted as $\max (E)$. Then, the average short-term energy $DE$ is given as:
+Traditional end-point detection algorithm \cite{stowell2015detection}, however, uses a fixed double threshold and must be obtained by a
+large number of data samples, which has two drawbacks. First, the fixed double threshold may cause error detection at the beginning of
+acoustic event. Second, the requirement of a large number of data samples would lead to large system latency. \textcolor{cyan}{To address
+these issues, we develop a detection method that does not require pre-sampling to obtain the optimal thresholds. Instead, our algorithm
+estimates the thresholds on a per signal basis. This strategy not only reduces the number of data samples needed, but also leads to a
+higher accuracy. }
+
+Specifically, since the first few frames and the last few frames are mostly mute or are the background noise, we select the first five
+frames and the last five frames to calculate their short-term energy, which are denoted as $E_s$ and $E_e$, respectively. And then the two
+are combined to obtain the mean $E_n$ as the estimated energy value of the noise segment.Let the maximum value of the short-term energy
+over all frames denoted as $\max (E)$. Then, the average short-term energy $DE$ is given as:
 \begin{eqnarray}
       &E_n = \frac{(E_s+E_e)}{2}, \\
       &DE = \max (E)-E_n.\label{eq:DE}
