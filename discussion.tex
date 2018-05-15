@@ -15,15 +15,15 @@ In this paper, we have shown that sensors available on off-the-shelf smartwatche
   \item \textbf{Limitations of the algorithm.}
   When we try to detect sleep posture, we find a corresponding relationship between the position of the arm and the sleeping posture, so we indicate the sleeping posture by detecting its position. But currently we consider some specific positions of the arm in the four sleeping positions, some unusual arm's positions are ignored by us and that is something we need to improve further in future work.
 
-  \textcolor{cyan}{\item \textbf{Limitations of single wrist sensor.} In our paper, we only use the sensor data in the left-hand smart
-  watch. Although movement patterns of the left and right wrist are different during sleep, the technique used for detecting sleep
-  related behaviors is the same. Some sleep related events like the sleep posture, body rollover, acoustic events, illumination
-  conditions, are not affected by different wrists. The reason is that these events are related to the entire body rather than the part
-  of the body. To adapt our approach to these sleep events, the only thing we need to do is adjusting new experimental parameters when
-  the smartwatch is worn on a different wrist. For the hand position detection and micro-body movement detection (including the arm
-  raising and hand movement), wearing the smartwatch on a different wrist does have an impact. This is because the hand movement
-  probability and frequency are different on different hands. However, the degree of impact on our detection performance varies from
-  person to person and can be largely cancelled through calibration. This is where we need to measure and consider in our future work.}
+  \textcolor{cyan}{\item \textbf{Limitations of single wrist sensor.} 
+  	{\systemname} uses the sensory data of only one wrist, it will lose efficiency for detecting specific events of the other wrist. Even so, it can achieve accurate sleep quality assessment result. Actually, although movement patterns of the left and right wrist are different during sleep, the technique used for detecting sleep
+  	related behaviors is the same. Some sleep related events like the sleep posture, body rollover, acoustic events, illumination
+  	conditions, are not affected by different wrists. The reason is that these events are related to the entire body rather than the part
+  	of the body. To adapt our approach to these sleep events, the only thing we need to do is adjusting new experimental parameters when
+  	the smartwatch is worn on a different wrist. For the hand position detection and micro-body movement detection (including the arm
+  	raising and hand movement), wearing the smartwatch on a different wrist does have an impact. This is because the hand movement
+  	probability and frequency are different on different hands. However, the degree of impact on our detection performance varies from
+  	person to person and can be largely cancelled through calibration. This is where we need to measure and consider in our future work. }
 
   \textcolor{cyan} {\item \textbf{Comparing to Fitbit.} In addition, when we use Fitbit as groundtruth, Fitbit is worn on a different
       wrist from {\systemname}. However, from the analysis of the basic principles of sleep stage detected by {\systemname} and Fitbit,
