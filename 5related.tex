@@ -26,32 +26,21 @@ Moreover, these actigraphy-based wristband devices or smartwatch Apps only can g
 \textcolor{blue}{All in all, as we can see from Table \ref{tab:related_work}, the advantage of {\systemname} is that it can detect more fine-grained sleep-related events to obtain more abundant sleep information, which is currently on the market for commercial or scientific research sleep monitoring system can not be achieved. And the performance of {\systemname} has been improved to some extent. Our original intention and focus are more inclined to enable users to have a deeper and more comprehensive understanding of their sleep, explore the cause s of sleep quality, and provide users with more practical advice to point them in a clear direction for improving sleep quality and being healthy. And compared with some medical technology like PSG, our advantages are inexpensive and easy to deploy at home, so it is suitable for most general public. And it does not need a large number of instruments attached to the user's body, thus it has less intrusiveness for sleep and does not require professional personnel to operate. Although the accuracy of {\systemname}'s ability to detect sleep cannot be compared to medical technology, it is enough for the average family's daily sleep monitoring needs. The most important is that we concentrates on physical activities rather than biomedical signals, so these rich physical activities detected are easily understood by users, and they can be adjusted with improved and improved sleep based on the results of monitoring.}
 
 
-\begin{table*}[!thbp]\footnotesize
-%\setlength{\abovecaptionskip}{0.8pt}
-  \centering  % ±í¾ÓÖÐ
-  \tabcolsep6pt
-  %\arrayrulewidth1pt
-  \caption{Comparison of related work.}\label{tab:related_work}
-  \renewcommand{\multirowsetup}{\centering}
-  \noindent\makebox[\textwidth]{%
-        \begin{tabularx}{1.0\textwidth}{|c|c|c|c|c|c|c|c|}
-        \cline{1-8}
-        \multicolumn{1}{|c|}{\multirow{2}*{\textbf{\footnotesize System}}}
-        &\multicolumn{7}{c|}{\textbf{ \footnotesize Advantages}} \\
-         \cline{2-8}
-    &  \multicolumn{1}{c|}{\textbf{ \footnotesize High Accuracy}}
-    &  \multicolumn{1}{c|}{\textbf{ \footnotesize Practicality }}
-    &  \multicolumn{1}{c|}{\textbf{ \footnotesize Convenience}}
-    &  \multicolumn{1}{c|}{\textbf{ \footnotesize Economical}}
-    &  \multicolumn{1}{c|}{\textbf{ \footnotesize Information Richness }}
-    &  \multicolumn{1}{c|}{\textbf{ \footnotesize Understandability}}
-    &  \multicolumn{1}{c|}{\textbf{ \footnotesize Guidance}} \\
-        \cline{1-8}
-        \multirow{4}{2.35cm}  {\textbf{SleepGuard\\Medical technology\\Smartphone\\Wearable device}}
-       & &$\checkmark$ &$\checkmark$  & $\checkmark$  & $\checkmark$&$\checkmark$ &$\checkmark$ \\
-        &$\checkmark$ & &  &   & $\checkmark$& & \\
-        & &$\checkmark$ &$\checkmark$  &$\checkmark$   & & $\checkmark$& \\
-        & &$\checkmark$ & $\checkmark$ & $\checkmark$  & & $\checkmark$& \\
-        \cline{1-8}
-  \end{tabularx}}
+\begin{table*}[!t]
+  \centering
+  \small
+  \caption{Summary of existing solutions.}\label{tab:related_work}
+        \begin{tabular}{lcccccc}
+        \toprule
+        \textbf{System} & \textbf{High accuracy} & \textbf{Practicality} & \textbf{Low disruptive} & \textbf{Low cost} & \textbf{Informativeness} & \textbf{Interpretability}  \\
+        \midrule
+        \rowcolor{Gray} PSG     &  $\checkmark$ & &  &   & $\checkmark$ &  \\
+
+        Smartphone solutions& &$\checkmark$ &$\checkmark$  &$\checkmark$   & & $\checkmark$ \\
+
+        \rowcolor{Gray} Wearable solutions& &$\checkmark$ & $\checkmark$ & $\checkmark$  & & $\checkmark$ \\
+        \textbf{\systemname} & &$\checkmark$ &$\checkmark$  & $\checkmark$  & $\checkmark$&$\checkmark$  \\
+
+        \bottomrule
+  \end{tabular}
 \end{table*}

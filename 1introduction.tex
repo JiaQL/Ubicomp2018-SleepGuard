@@ -88,14 +88,57 @@ The present paper contributes by presenting the design and development of \syste
 
   % \FIXME{ZW: This one needs to be merged with the previous paragraph.}
 
-We evaluate \systemname through rigorous and extensive benchmark experiments conducted on data collected from fifteen participants during a two week monitoring period. The results of our experiments demonstrate that \systemname can accurately characterize body motions and movements during sleep, as well as capture different acoustic events. Specifically, the lowest accuracy for \systemname in our experiments is 87\%, with the best event detection accuracy reaching up to 98\%. We also evaluate the overall performance of \systemname, demonstrating that it can accurately detect various sleep stages, helping users to better understand their sleep quality. As part of our evaluation, we demonstrate that sleep quality estimates of \systemname closely match with subjective assessments of sleep quality and are comparable to quality estimates produced by a commercial state-of-the-art solution, \textcolor{blue}{Fitbit, that monitors a narrower range of sleep events and uses a larger set of sensor modalities.}
+We evaluate \systemname through rigorous and extensive benchmark experiments conducted on data collected from fifteen participants during a
+two week monitoring period. The results of our experiments demonstrate that \systemname can accurately characterize body motions and
+movements during sleep, as well as capture different acoustic events. Specifically, the lowest accuracy for \systemname in our experiments
+is 87\%, with the best event detection accuracy reaching up to 98\%. We also evaluate the overall performance of \systemname, demonstrating
+that it can accurately detect various sleep stages, helping users to better understand their sleep quality. As part of our evaluation, we
+show that the sleep stage detection of \systemname closely match with subjective assessments and are comparable to the estimation given by
+Fitbit, a commercial state-of-the-art solution. Compared to Fitbit, \systemname can report a wider range of sleep events, which in turn
+lead to a better understanding for the causes of sleep problems. We show that \systemname successfully helps some of our testing users in
+finding the cause of poor sleep, whether it is due to the hand position, body posture or sleeping environment.
 
-\noindent \paragraph{Summary of Contributions}
+
+\subsection{Contributions}
+This paper makes the following contributions:
 
 \begin{itemize}[noitemsep]
-	\item We present the design and development of \systemname, the first holistic sleep monitoring system to rely solely on sensors available in an off-the-shelf smartwatch to capture a wide range of sleep information that characterizes overall sleep quality, user behaviours during sleep, and the sleep environment.
-	\item We develop novel and lightweight algorithms for capturing sleep-related information on smartwatches taking into consideration changes in orientation and location of the device during different parts of the night. \textcolor{blue}{When we design these algorithms, firstly, we found a key basis for sleeping posture detection that arms have common and (reasonably) stable positions in each posture. Thus, we can build a mapping between the user's arms position and sleeping postures and identify the user's posture by identifying periods where the hand is in a position that correlates with a specific posture. Secondly, we try to detect the position of the hand based on another intuition£¬that is any change in hand position results in a movement trajectory that is uniquely determined by the start and end position of the hand. However, we find that in practical applications, it is difficult for us to obtain the starting position of the hand every time, so rely on the trajectory of the hand movement does not work. In the end, we based on a key intuition is that respiratory lead to the movement of the abdomen and chest, making the acceleration signals to exhibit a distinctly periodic fluctuation. We can use the occurrence of respiratory events to determine if the hand is indeed on the body (abdomen or chest). Thirdly, when we detect the body rollover events, we avoided using the methods of detecting the direction of rotation of the arm or the tilt of the wrist during movement of the body. Although these two methods seem to be effective, but in the actual sleep process, the error they get is very large. To deal with this challenge, we incorporate the body postures to improve the detection accuracy. It is based on the simple fact that the body postures are different before and after the rollover. Nextly, we detect the micro body movement based on the signal duration time and the first-order derivative of the acceleration, in order to realize the classification of more micro motions. In addition, we also designed two interesting algorithms, namely the detection of acoustic events, changing the traditional complex algorithm multi-dimensional signal feature extraction, instead, it is through mining the essential characteristics of events, that is exploiting the inherent characteristics of different acoustic event to detect. And the other algorithm is illumination conditions detection, we use the movement of the hand to avoid the problem of unstable reading of the light sensor.}
-	\item We extensively evaluate the performance of \systemname using measurements collected from two-week monitoring of $15$ participants. Our results demonstrate that \systemname can accurately capture a wide range of sleep events, estimate different sleep stages, and produce meaningful information about overall sleep quality. We also compare the sleep quality estimates of \systemname against subjective assessments, demonstrating high level of agreement.
+	\item We present the design and development of \systemname (\FIXME{Section xx}), the first holistic sleep monitoring system to rely solely on sensors
+available in an off-the-shelf smartwatch to capture a wide range of sleep information that characterizes overall sleep quality, user
+behaviours during sleep, and the sleep environment.
+	
+\item We develop novel and lightweight algorithms for capturing sleep-related information on smartwatches taking into consideration
+    changes in orientation and location of the device during different parts of the night. We show how to overcome specific challenges to
+    effectively track events like sleep postures (\FIXME{Section xx}, hand positions (\FIXME{Section xx}), body rollovers(\FIXME{Section
+    xx}), and acoustical and lighting conditions (\FIXME{Section xx}).
+
+
+     %\textcolor{blue}{When we design these
+%    algorithms, firstly, we found a key basis for sleeping posture detection that arms have common and (reasonably) stable positions in
+%    each posture. Thus, we can build a mapping between the user's arms position and sleeping postures and identify the user's posture by
+%    identifying periods where the hand is in a position that correlates with a specific posture. Secondly, we try to detect the position
+%    of the hand based on another intuition£¬that is any change in hand position results in a movement trajectory that is uniquely
+%    determined by the start and end position of the hand. However, we find that in practical applications, it is difficult for us to
+%    obtain the starting position of the hand every time, so rely on the trajectory of the hand movement does not work. In the end, we
+%    based on a key intuition is that respiratory lead to the movement of the abdomen and chest, making the acceleration signals to
+%    exhibit a distinctly periodic fluctuation. We can use the occurrence of respiratory events to determine if the hand is indeed on the
+%    body (abdomen or chest). Thirdly, when we detect the body rollover events, we avoided using the methods of detecting the direction of
+%    rotation of the arm or the tilt of the wrist during movement of the body. Although these two methods seem to be effective, but in the
+%    actual sleep process, the error they get is very large. To deal with this challenge, we incorporate the body postures to improve the
+%    detection accuracy. It is based on the simple fact that the body postures are different before and after the rollover. Nextly, we
+%    detect the micro body movement based on the signal duration time and the first-order derivative of the acceleration, in order to
+%    realize the classification of more micro motions. In addition, we also designed two interesting algorithms, namely the detection of
+%    acoustic events, changing the traditional complex algorithm multi-dimensional signal feature extraction, instead, it is through
+%    mining the essential characteristics of events, that is exploiting the inherent characteristics of different acoustic event to
+%    detect. And the other algorithm is illumination conditions detection, we use the movement of the hand to avoid the problem of
+%    unstable reading of the light sensor.}
+	
+
+    \item We extensively evaluate the performance of \systemname using measurements collected from two-week monitoring of $15$
+        participants (\FIXME{Section xx}). Our results demonstrate that \systemname can accurately capture a wide range of sleep events,
+        estimate different sleep stages, and produce meaningful information about overall sleep quality (\FIXME{Section xx}).  We show
+        that how \systemname reveals the causes of poor sleeps for some of our testing users and subsequently helps them improve their
+        sleep by changing their sleep behaviours and sleeping environment (\FIXME{Section xx}).
 \end{itemize}
 
 %To summarize, the main contribution of this paper is the first smartwatch-based system that can capture a wider range of sleep events with a high
