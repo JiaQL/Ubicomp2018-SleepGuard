@@ -52,11 +52,10 @@ home, and they slept for at least 6 hours per day.
 
 Our participants are asked to wear a smartwatch on their wrists. Fig.~\ref{fig:setup} shows the experimental setup where we placed three
 video cameras on the ceiling to monitor the user's sleep activities. The cameras have night vision and thus can record high-quality videos
-at nights.  We inspect the video footage to manually
-label the user's sleep activities and use these as the ground truth to evaluate \systemname. We use the sleep stages reported by Fitbit
-Charge2 which is proven to be accurate in monitoring user's sleep stages~\cite{evenson2015systematic}. Therefore, our participants are asked to wear two
-smartwatches on their wrists: a Fitbit Charge2 that runs the Fitbit app and a Huawei Smartwatch 2 that runs \systemname.
+at nights. We inspect the video footage to manually label the user's sleep activities and use these as the ground truth to evaluate \systemname. \textcolor{blue}{We use the sleep stages reported by Fitbit Charge2 which is proven to have a good association of movement measurements and to be comparable to PSG in adults ~\cite{evenson2015systematic,fitbit01,fitbit02,fitbit03}, especially in estimating REM and light sleep stage. As we know, Fitbit is a commercial state-of-the-art and a popular sleep monitoring wristband. It has less interference with the subject's normal sleep process, making easier for subjects to relax and maintain normal sleep. However, even if PSG has high accuracy in monitoring sleep, it may have some impact on their psychological and normal sleep processes (as it requires the user to wear many instruments) , so as not to reflect the actual sleep conditions. Moreover, Fitbit is inexpensive and easy to deploy, so it is very convenient to apply to our large number of home-style experimental scenarios.} Therefore, our participants are asked to wear two smartwatches on their wrists: a Fitbit Charge2 that runs the Fitbit app and a Huawei Smartwatch 2 that runs \systemname.
 
 We compare our approach against Sleep Hunter~\cite{gu2016sleep}, a state-of-the-art mobile-based sleep monitoring approach, and a
 smartphone-based sleep monitoring app named Sleep as Android~\cite{SleepAndroid}. To provide a fair comparison, we also place a smartphone
 next to the user's body on the bed to collect the data for Sleep Hunter and Sleep as Android.
+
+
