@@ -103,14 +103,14 @@ finding the cause of poor sleep, whether it is due to the hand position, body po
 This paper makes the following contributions:
 
 \begin{itemize}[noitemsep]
-	\item We present the design and development of \systemname (\FIXME{Section xx}), the first holistic sleep monitoring system to rely solely on sensors
+	\item We present the design and development of \systemname (Section ~\ref{Sec:3design}), the first holistic sleep monitoring system to rely solely on sensors
 available in an off-the-shelf smartwatch to capture a wide range of sleep information that characterizes overall sleep quality, user
 behaviours during sleep, and the sleep environment.
 	
 \item We develop novel and lightweight algorithms for capturing sleep-related information on smartwatches taking into consideration
     changes in orientation and location of the device during different parts of the night. We show how to overcome specific challenges to
     effectively track events like sleep postures (Section~\ref{sec:sleeppdet}), hand positions (Section~\ref{sec:handpr}), body
-    rollovers(\FIXME{Section xx}), and acoustical and lighting conditions (\FIXME{Section xx}).
+    rollovers(Section~\ref{sec:bodyro}), micro body movement(Section~\ref{sec:microbo}), and acoustical (Section~\ref{sec:acoustic}) and lighting conditions (Section~\ref{sec:illumination}).
 
 
      %\textcolor{blue}{When we design these
@@ -135,10 +135,10 @@ behaviours during sleep, and the sleep environment.
 	
 
     \item We extensively evaluate the performance of \systemname using measurements collected from two-week monitoring of $15$
-        participants (\FIXME{Section xx}). Our results demonstrate that \systemname can accurately capture a wide range of sleep events,
-        estimate different sleep stages, and produce meaningful information about overall sleep quality (\FIXME{Section xx}).  We show
+        participants (Section~\ref{sec:expsetup}). Our results demonstrate that \systemname can accurately capture a wide range of sleep events,
+        estimate different sleep stages, and produce meaningful information about overall sleep quality (Section~\ref{sec:4experiment}).  We show
         that \systemname successfully reveals the causes of poor sleeps for some of our testing users and subsequently helps them improve
-        their sleep by changing their sleep behaviours and sleeping environment (\FIXME{Section xx}).
+        their sleep by changing their sleep behaviours and sleeping environment (Section~\ref{sec:user_survey}).
 \end{itemize}
 
 %To summarize, the main contribution of this paper is the first smartwatch-based system that can capture a wider range of sleep events with a high
