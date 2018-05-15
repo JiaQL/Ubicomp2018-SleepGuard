@@ -406,11 +406,11 @@ between two time points.} Note that {\systemname} not only counts the number of 
 rollover event.
 
 
-\subsubsection{Micro body movement \label{sec:microbo}}
+\subsubsection{Detecting micro-body movements \label{sec:microbo}}
 
 Besides major body movement, such as rollovers, there often are involuntary body movements that can affect sleep quality. With the deepening of sleep, limbs are extremely relaxed, and a little stimulus will produce trembling and micro beating. Such behavior is most likely to occur during the deep sleep stage and the REM stage~\cite{ancoli2003role,Jean2000Sleep}. Therefore, by detecting such micro body movements and distinguish them from large body movements can help us to further analyze the user's sleep stage. In this paper, we are interested in the sleep-related body movements including hand moving, arm raising, and body trembling.
 
-\textcolor{cyan}{One of the challenges in detecting the micro body movements is to cancel the inherent noises brought by the accelerometer.
+\textcolor{cyan}{One of the challenges in detecting the micro-body movements is to cancel the inherent noises brought by the accelerometer.
 To cancel the noises, we apply a moving window to the collected accelerometer data points to minimize the impact of the outliers. To
 determine the size of the moving window, we apply different parameter settings to our training data. We found that a moving widow with a
 size of 35 gives the best average results on our training set. Therefore, we choose to apply a moving window of 35 sample points to the
@@ -419,30 +419,63 @@ collected user data and then calculate Root Sum Square (RSS) for the data points
 \begin{equation}
       Rss(t) =\sqrt{(acc_x(t))^{2}+(acc_y(t))^{2}+(acc_z(t))^{2}},
 \end{equation}
-$acc_x(t)$, $acc_y(t)$ and $acc_z(t)$ represent the accelerometer sample value of x-axis, y-axis and z-axis at time stamp t respectively. \textcolor{blue}{And then we can obtain the first-order derivative of the merged acceleration.}
+$acc_x(t)$, $acc_y(t)$ and $acc_z(t)$ represent the accelerometer sample value of x-axis, y-axis and z-axis at time stamp t respectively.
+
+
+\textcolor{cyan}{We can obtain the first-order derivative of from the RSS values:}
 \begin{equation}
       V(t)=Rss(t)-Rss(t-1).
 \end{equation}
 
-Eventually, we set the threshold to be 0.03, which can achieve a satisfactory detection performance. We also observe that the micro movement duration is very short, which lasts less than 2 s. However, in our body rollover experiments, we find that the average movement duration is 3 s, as shown in Fig. \ref{fig:LeftToRight} - Fig. \ref{fig:RightToLeft}. Therefore, we can first divide the body movement events into large movement and micro movement by detecting the signal duration time. \textcolor{blue}{In order to distinguish micro-body movements, including hand movement, arm raising and body trembling, it is very intuitive to detect based on the duration of the movement, because we find that the durations of these movements are significantly different. So we try to use the duration of these movements to perform detection. However, we find that the average duration of the arm rising is 1.8 s, but the duration of the other two types of movement is around 1 s, so it is difficult to set a suitable threshold to accurately detect them. Therefore, only through the duration of the movement we can only detect the arm rising with obvious feature. For the hand movement, and body trembling is not effective. However, we have found that body  trembling is a sudden movement event, which leads to a more pronounced change in acceleration, so we can use acceleration changes to distinguish them based on such an observed fact. Specifically,  as we can see from the figure,  acceleration of body trembling has a more pronounced peak when compared to the hand movement. So we perform peak detection on the first-order derivative of the acceleration.} So we perform peak detection on the acceleration variance. For the detected peak, we calculate the difference $d$ between this peak and the average of the peaks in the reference data set. %Then for the micro body movement events including hand movement, arm raising and body trembling, we first find that the durations of these movements are significantly different. The average duration of arm rising is 1.8 s, but the duration of hand movement is only 1 s, while body tremors lasts less than 1s, as shown in Fig.~\ref{fig:micro-move}. The large difference in temporal duration makes it possible to easily distinguish raising an arm from the other types of movements. To further classify hand movement and body trembling, we observe the corresponding acceleration variance. As we can see from the figure,  acceleration of body trembling has a more pronounced peak when compared to the hand movement. So we perform peak detection on the acceleration variance. For the detected peak, we calculate the difference $d$ between this peak and the average of the peaks in the reference data set.
-\begin{equation}
-      d=\mid(peak-average(oi))\mid,
-\end{equation}
-$oi$ indicates the type of micro-movement, when $oi$ is 1, it indicates the hand movement and 2 represent body trembling.
+Eventually, we set the threshold to be 0.03, which can achieve a satisfactory detection performance. We also observe that the micro movement duration is very short, which lasts less than 2 s.
+However, in our body rollover experiments, we find that the average movement duration is 3 s, as shown in Fig. \ref{fig:LeftToRight} - Fig. \ref{fig:RightToLeft}.
+Therefore, we can first divide the body movement events into large movement and micro movement by detecting the signal duration time.
 
+\textcolor{cyan}{To distinguish among the micro-body movements of hand movement, arm raising and body trembling, we first consider the
+duration of the movement. We observe from our training data that an arm rising action typically takes around 1.8 second, while a hand
+movement and a body trembling take around 1 second. Using the duration of the movement, we can distinguish arm rising from the other two
+movements. We also find that the body trembling tends to lead to a more drastic change in the accelerometer readings compared to the hand
+movement. This observation is depicted in Fig.{fig:micro-move} using samples from one of our training users. Based on this observation, we
+then use the change of accelerometer reading to distinguish between the body trembling and the hand movement. We do so by calculating the
+first-order derivative of accelerometer data to find out the peak of the acceleration data.  If the peak is great than 1.5 and the duration
+of the movement took between 0.8 and 1.2 second, a body trembling is detected; if the peak is less than 1 and the duration of the movement
+took between 0.8 and 1.2 second, a hand movement is detected; otherwise, if the duration of the movement took between 1.5 and 2 second, an
+arm rising is detected. These thresholds are determined from our training data.}
+
+%\textcolor{blue}{In order to distinguish micro-body movements, including hand movement, arm raising and body trembling, it is very
+%intuitive to detect based on the duration of the movement, because we find that the durations of these movements are significantly
+%different.
+%So we try to use the duration of these movements to perform detection. However, we find that the average duration of the arm rising is 1.8 s, but the duration of the other two types of movement is around 1 s,
+% so it is difficult to set a suitable threshold to accurately detect them. Therefore, only through the duration of the movement we can only detect the arm rising with obvious feature.
+% For the hand movement, and body trembling is not effective. However, we have found that body  trembling is a sudden movement event, which leads to a more pronounced change in acceleration,
+% so we can use acceleration changes to distinguish them based on such an observed fact. Specifically,  as we can see from the figure,  acceleration of body trembling has a more pronounced peak when compared to the hand movement.
+% So we perform peak detection on the first-order derivative of the acceleration.}
+%
+% So we perform peak detection on the acceleration variance. For the detected peak, we calculate the difference $d$ between the peak of the accelerometer data and the average peaks of the accelerometer readings in our training data.
+%
+%\begin{equation}
+%      d=\mid(peak-average(oi))\mid,
+%\end{equation}
+%$oi$ indicates the type of micro-movement, when $oi$ is 1, it indicates the hand movement and 2 represent body trembling.
+%
 
 \begin{figure}[!t]
 \centering
       \includegraphics[width=0.43\linewidth]{Figures/Micromovement.pdf}
-  \caption{Acceleration reading for micro body movements.}\label{fig:micro-move}
+  \caption{Accelerometer readings for micro body movements using samples from one of our training users.}\label{fig:micro-move}
 \end{figure}
 
-For the two types of potential micro-movements to be classified, we calculate variances for 100 sets of micro-movement data for these 10 volunteers and perform peak detection, as well as make these peaks as features for a particular type of movement to establish a reference data set. In order to classify the micro-movement more accurately, we further obtain the average of the peak features ($average(oi)$) in the reference data set. And then we determine the type of micro-movement with the smallest value of d as the final detection result.
+%For the two types of potential micro-movements to be classified, we calculate variances for 100 sets of micro-movement data for these 10 volunteers and perform peak detection, as well as make these peaks as features for a particular type of movement to establish a reference data set. In order to classify the micro-movement more accurately, we further obtain the average of the peak features ($average(oi)$) in the reference data set. And then we determine the type of micro-movement with the smallest value of d as the final detection result.
 
 
 \subsection{Detecting Acoustic Events \label{sec:acoustic}}
 Acoustic events during sleep, such as snore, cough and somniloquy, can reflect and affect user's sleep quality and physical health. For example, snore is one of the possible symptoms of cerebral infarction patients.  And long-term snoring can also have a serious impact on health and sleep. It can cause behind sleep apnea or narcolepsy, a sleeping disorder~\cite{snoring2016,snoring2013}. And when there is a cough, the human cerebral cortex cells are always in an excited state, limiting the depth of sleep, allowing only short sleep between wakefulness, like many other sleep disruptions. {\systemname} can detect these different acoustic events, including snore, cough and somniloquy.
-\textcolor{blue}{Different from traditional parameters based on acoustic classification algorithm~\cite{gu2016sleep}, which is based on multi-dimensional signal feature extraction methods to detect, which will lead to high complexity of the algorithm. To avoid this problem, we directly perform physical signals detection and recognition by mining the essential characteristics of events. In other words, we exploit the inherent characteristics of different acoustic events and design a lightweight algorithm for effective classification.}%Different from traditional parameters based acoustic classification algorithm~\cite{gu2016sleep}, we exploit the inherent characteristics of different acoustic events and design a lightweight algorithm for effective classification.
+\textcolor{blue}{Different from traditional parameters based on acoustic classification algorithm~\cite{gu2016sleep}, which is based on
+multi-dimensional signal feature extraction methods to detect, which will lead to high complexity of the algorithm. To avoid this problem,
+we directly perform physical signals detection and recognition by mining the essential characteristics of events. In other words, we
+exploit the inherent characteristics of different acoustic events and design a lightweight algorithm for effective
+classification.}%Different from traditional parameters based acoustic classification algorithm~\cite{gu2016sleep}, we exploit the inherent
+characteristics of different acoustic events and design a lightweight algorithm for effective classification.
 
 \begin{figure*}[!t]
 \centering
