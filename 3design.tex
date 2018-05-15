@@ -32,7 +32,7 @@
 One's sleeping position, also referred to as {\em sleep posture}, and the extent of body movements are important factors in determining overall sleep quality. Suboptimal posture has been shown to affect the severity of sleep disorders and is widely used in medical diagnoses to analyse effects of sleep disorders~\cite{oksenberg1998effect,eiseman2012impact} while having a good sleep posture has been shown to correlate with subjective assessments of sleep quality~\cite{dekoninck83sleep}. Similarly, high degree of body movements during sleep likely reflects restlessness, which results in poor sleep quality. {\systemname} uses motion sensors (accelerometer, gyroscope, and orientation sensor) to capture user's sleep posture and habits. In the following we detail the techniques we use for capturing the body posture and movements.  {\systemname}, currently supports the 4 basic sleep postures (see Fig.~\ref{fig:BodyPosture}); 3 hand positions (see Fig.~\ref{fig:HandPosition}); 6 types of body rollovers (see Fig.~\ref{fig:BodyRollover} for an example); and 3 types of body micro movements. %These events comprehensively and highly relate to the sleep stages and quality.
 
 
-\subsubsection{Sleep Posture Detection \label{sec:sleeppdet}}
+\subsubsection{Sleep Posture Detection\label{sec:sleeppdet}}
 
 Dreaming and sleep quality are associated with underlying brain functions, which in turn are affected by body posture~\cite{posture2004}.
 Sleep posture also varies across individuals and should fit personal and physical needs of the individual~\cite{posture2016,posture2017}.
@@ -82,12 +82,30 @@ To separate sleep postures, {\systemname} considers a set of feasible hand posit
 
 %e use a supervised classifier to  And then we use a supervised learning method to create a sleep posture profile. Specifically, we collect training data to create a mapping (i.e., angle mapping) between the angles and the arm under different positions.
 
-Similarly to SleepMonitor~\cite{sleepmonitor}, we consider the three-axis tilt angle calculated from acceleration data as the main  feature for detecting postures. For constructing a posture profile for each position using supervised learning to create a classifier that associates the tilt angles with a particular position. To extract the window-based tilt angle features, we average all the calculated angles in a window. Fig. \ref{fig:posture} shows the characteristics of four sleep postures with, it indicates that the tilt angles of three axes have obvious differences. The sleep posture thus can be inferred based on the position of the smartwatch and the created angle mapping. However, a limitation of this approach is that the hand positions during supine and prone postures are similar when the hand is located on the side of the head (Fig. \ref{fig:Supine} and \ref{fig:Prone}), thus the classification accuracy will be affected.
+Similarly to SleepMonitor~\cite{sleepmonitor}, we use tilt angles readings from three dimensions to detecte postures. We use a K-nearest
+neighbour (with $k$ set to 1) classifier to determine which of the targeting postures that a input feature vector corresponds to. To
+determine which posture an input feature corresponds to, we find which of the four posture profiles (i.e., a tilt angle value) is closest
+to the input data. The posture profiles used for this task are collected from our pilot study involved 10 users who are different from the
+ones took part in our evaluation. To identify which of the postures the data collected within a time window corresponds to, we average all
+the calculate tilt angle values of that window. To determine which posture an input feature corresponds to, we find which of the four
+posture profiles (i.e., tilt angle values in three dimensions) is closest to the input data. The posture profiles used for this task are
+collected from our pilot study involved 10 users who are different from the ones took part in our evaluation. To identify which of the
+postures the data collected within a time window corresponds to, we average all the calculate tilt angle values of that window in each
+dimension. We then calculate the Euclidean distance of the input values to each of the profiles across the three dimensional to find which
+profile is closest to the input values. We then use the body posture associated with the nearest neighbor as the detection outcome.
+
+
+
+
+Fig. \ref{fig:posture} shows the angle values of the four sleep postures targeted in this work. This diagram suggests that the tilt angles
+of three axes have obvious differences. The sleep posture thus can be inferred based on the position of the smartwatch and the created
+angle mapping. However, a limitation of this approach is that the hand positions during supine and prone postures are similar when the hand
+is located on the side of the head (Fig. \ref{fig:Supine} and \ref{fig:Prone}), thus the classification accuracy will be affected.
 
 To improve detection accuracy between supine posture and prone postures, \systemname integrates orientation data as auxiliary feature. This is based on the observation that hand directions in the supine and prone positions are different. When the result of the previous step is prone or supine, and the hand is detected to be located next to the body, we combine the tilt angle with three axes data obtained from the direction sensor as a new feature, and classify these postures using a template-based distance matching approach. Specifically, we return the position corresponding to the template with minimum Euclidean distance with current sensor measurements as the user's posture. %Note that when we use the direction sensor, we must limit the pillow orientation remaining unchanged (in the experiment our pillow is placed on the north). In fact, this assumption can be easily satisfied since most people usually have fixed sleep directions.
 
 
-\subsubsection{Hand Position Recognition \label{sec:handpr}}
+\subsubsection{Hand Position Recognition\label{sec:handpr}}
 
 Hand position during sleep can disclose potential health problems, and improper hand position can even result in health issues~
 \cite{position2014}. For instance, placing the hand on the abdomen may indicate discomfort whereas placing the hand on the chest can
@@ -104,11 +122,11 @@ there are found to be the most common and representative positions in our pilot 
 
 We design a novel algorithm to map hand trajectories to  hand positions. The key intuition behinds our algorithm is that any change in hand
 position results in a movement trajectory that is uniquely determined by the start and end position of the hand. By comparing motion
-measurements with such hand trajectory templates, we can identify the most likely position. Our use of template-based matching is also
-motivated by gesture recognition literature, which has shown template-baesd techniques to offer better performance than feature-based
-solutions~\cite{ahmed15checksum}. In \systemname we consider nine different types of hand trajectories, corresponding to motions from the
-side of body to the chest, head or abdomen; and those between head, chest and abdomen. Note that we do not consider the case where the hand
-moves from head, chest, or abdomen to the side of the body as this is established as part of the posture classification.
+measurements with such hand trajectory profiles, we can identify the most likely position. Like posture detection, we also use a K-nearest
+neighbor classifier to recognize the hand position. In \systemname we consider nine different types of hand trajectories, corresponding to
+motions from the side of body to the chest, head or abdomen, and those between head, chest and abdomen. Note that we do not consider the
+case where the hand moves from head, chest, or abdomen to the side of the body as this is established as part of the posture
+classification.
 
 \begin{figure}[!t]
 	\centering
