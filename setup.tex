@@ -1,7 +1,7 @@
 \section{Evaluation Methodology}
 \label{sec:expsetup}
 
-\subsection{Implementation}
+\subsection{Implementation \label{sec:implementation}}
 We prototype and evaluate \systemname on a Huawei Smartwatch 2 wearable device. The smartwatch is equipped with a Quad-core Cortex-A7
 processor at 1.1 GHz.  It runs the Android Wear 2.0 operating system. We use five sensors of the smartwatch: the accelerometer, gyroscope,
 microphone, light sensor and orientation sensor. To reduce energy consumption of the smartwatch, in our experiments we analyse the sensor data on a a XiaoMI Note2 Android smartphone to which the smartwach sends sensor measurements over Bluetooth, \textcolor{blue}{and the data is collected every 30 ms on the smartwatch. Although our sampling rate is not very high, it is sufficient for detecting the sleep-related events and this can save energy consumption of the watch compared to a high sampling rate.} %The collected sensor data are sent via Bluetooth to a XiaoMI Note2 Android smartphone for post-processing and
@@ -57,5 +57,3 @@ at nights. We inspect the video footage to manually label the user's sleep activ
 We compare our approach against Sleep Hunter~\cite{gu2016sleep}, a state-of-the-art mobile-based sleep monitoring approach, and a
 smartphone-based sleep monitoring app named Sleep as Android~\cite{SleepAndroid}. To provide a fair comparison, we also place a smartphone
 next to the user's body on the bed to collect the data for Sleep Hunter and Sleep as Android.
-
-
