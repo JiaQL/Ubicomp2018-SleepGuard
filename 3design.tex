@@ -116,37 +116,50 @@ a tingling sensation and numbness \cite{position2014}.
 
 {\systemname} is designed to recognize three common hand positions -- if the hand is placed on the abdomen, chest or head when the user is
 in the supine posture, as shown in Fig. \ref{fig:HandPosition}. We have chosen these three hand positions because there are found to be the
-most common and representative positions in our pilot study (Section~\ref{sec:implementation}).
+most common and representative positions in our pilot study (Section~\ref{sec:implementation}). Our hand position recognition algorithm is
+based on sensor data of rotation angles, tilt angles, and respiratory events. It works by first using the rotation and tile angles to
+detect if the hand was placed on the head. If the hand was detected to be not put on the head, it then uses the respiratory events and
+rotation angles to distinguish the abdomen position from the chest position. We now describe how to detect each of the three positions in
+more details.
+
+
 
 
 %\textcolor{blue}{The reason why we choose these three hand positions is that they are found to be the most common and representative
 %positions during our pilot study (see Sec. 3.1), and they are really related to sleep and health.} Note that as the hand is mostly on the
 %bed in prone and lateral positions, the main benefits of hand position recognition are for detecting the supine posture.
 
-\paragraph{Check if the hand was placed on the head.}
+\paragraph{Detect the head position.}
+Fig.~\ref{Bodyhand} show the rotation angle values gathered from the x, y, and z dimensions using the gyroscope for one of our pilot study
+users when his hand next to the body was moved to his head, abdomen, and chest. It is to note that we also observe similar behaviors for
+our other participants. As can be seen from the figure, when the hand is moved to the head, the changes in the rotation angles are
+significantly different from the readings given by moving the hand to the abdomen and the chest. This is largely due to the different
+direction that the palm is facing when the hand is placed on the head compared to the other positions.  \systemname exploits this
+observation to detect if the hand is placed on the head by inspecting the changes of the rotation angles and the hand trajectory.
+Specifically, ....
 
-We have designed a novel algorithm to map hand trajectories to  hand positions. The key intuition behinds our algorithm is that any change
-in hand position results in a movement trajectory that is uniquely determined by the start and end position of the hand. By comparing
-motion measurements with such hand trajectory profiles, we can identify the most likely position. Like posture detection, we also use a
-K-nearest neighbor classifier to recognize the hand position. In \systemname we consider nine different types of hand trajectories,
-corresponding to motions from the side of body to the chest, head or abdomen, and those between head, chest and abdomen. Note that we do
-not consider the case where the hand moves from head, chest, or abdomen to the side of the body as this is established as part of the
-posture classification.
+%We have designed a novel algorithm to map hand trajectories to  hand positions. The key intuition behinds our algorithm is that any change
+%in hand position results in a movement trajectory that is uniquely determined by the start and end position of the hand. By comparing
+%motion measurements with such hand trajectory profiles, we can identify the most likely position. Like posture detection, we also use a
+%K-nearest neighbor classifier to recognize the hand position. In \systemname we consider nine different types of hand trajectories,
+%corresponding to motions from the side of body to the chest, head or abdomen, and those between head, chest and abdomen. Note that we do
+%not consider the case where the hand moves from head, chest, or abdomen to the side of the body as this is established as part of the
+%posture classification.
 
 \begin{figure}[!t]
 	\centering
 	%\begin{minipage}[t]{0.325\linewidth}
+    	\subfigure[moving to the head]{\label{BodytoHead}
+		\includegraphics[width=0.32\linewidth]{Figures/BodytoHead.pdf}}
 	\subfigure[moving to the abdomen]{\label{BodytoAbdomen}
 		\includegraphics[width=0.32\linewidth]{Figures/BodytoAbdomen.pdf}}
 	%  \hfill
 	\subfigure[moving to the chest]{\label{BodytoChest}
 		\includegraphics[width=0.32\linewidth]{Figures/BodytoChest.pdf}}
 	%  \hfill
-	\subfigure[moving to the head]{\label{BodytoHead}
-		\includegraphics[width=0.32\linewidth]{Figures/BodytoHead.pdf}}
-    \subfigure[moving to the shoulder]{\label{BodytoShoulder}
-		\includegraphics[width=0.34\linewidth]{Figures/BodytoShoulder.pdf}}
-	\caption{Characteristics of hand movements when a hand next to the body moves to (a)  the abdomen,  (b) the chest, (c) the head, and (d) the shoulder. }\label{Bodyhand}
+  %  \subfigure[moving to the shoulder]{\label{BodytoShoulder}
+%		\includegraphics[width=0.34\linewidth]{Figures/BodytoShoulder.pdf}}
+	\caption{Rotation angle values when a hand of one of our users, placed next to the subject's body, is moved to his head (a), abdomen (b), and chest (c). }\label{Bodyhand}
 \end{figure}
 
 \begin{figure}
