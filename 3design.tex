@@ -107,26 +107,31 @@ To improve detection accuracy between supine posture and prone postures, \system
 
 \subsubsection{Hand Position Recognition\label{sec:handpr}}
 
-Hand position during sleep can disclose potential health problems, and improper hand position can even result in health issues~
+The hand position during sleep can disclose potential health problems, and an improper hand position can even result in health issues~
 \cite{position2014}. For instance, placing the hand on the abdomen may indicate discomfort whereas placing the hand on the chest can
 increase the likelihood of nightmares due to long-term pressure on the heart. Similarly, placing the hand on the head can put excess
 pressure on shoulder nerves and cause arm pain as blood flow is restricted. This can lead to eventual nerve damage, with symptoms including
-a tingling sensation and numbness \cite{position2014}. {\systemname} can recognize three hand positions, that are on the abdomen, chest or
-head when the user is in the supine posture, as shown in Fig. \ref{fig:HandPosition}. We have chosen these three hand positions because
-there are found to be the most common and representative positions in our pilot study (Section~\ref{sec:implementation}).
+a tingling sensation and numbness \cite{position2014}.
+
+
+{\systemname} is designed to recognize three common hand positions -- if the hand is placed on the abdomen, chest or head when the user is
+in the supine posture, as shown in Fig. \ref{fig:HandPosition}. We have chosen these three hand positions because there are found to be the
+most common and representative positions in our pilot study (Section~\ref{sec:implementation}).
 
 
 %\textcolor{blue}{The reason why we choose these three hand positions is that they are found to be the most common and representative
 %positions during our pilot study (see Sec. 3.1), and they are really related to sleep and health.} Note that as the hand is mostly on the
 %bed in prone and lateral positions, the main benefits of hand position recognition are for detecting the supine posture.
 
-We design a novel algorithm to map hand trajectories to  hand positions. The key intuition behinds our algorithm is that any change in hand
-position results in a movement trajectory that is uniquely determined by the start and end position of the hand. By comparing motion
-measurements with such hand trajectory profiles, we can identify the most likely position. Like posture detection, we also use a K-nearest
-neighbor classifier to recognize the hand position. In \systemname we consider nine different types of hand trajectories, corresponding to
-motions from the side of body to the chest, head or abdomen, and those between head, chest and abdomen. Note that we do not consider the
-case where the hand moves from head, chest, or abdomen to the side of the body as this is established as part of the posture
-classification.
+\paragraph{Check if the hand was placed on the head.}
+
+We have designed a novel algorithm to map hand trajectories to  hand positions. The key intuition behinds our algorithm is that any change
+in hand position results in a movement trajectory that is uniquely determined by the start and end position of the hand. By comparing
+motion measurements with such hand trajectory profiles, we can identify the most likely position. Like posture detection, we also use a
+K-nearest neighbor classifier to recognize the hand position. In \systemname we consider nine different types of hand trajectories,
+corresponding to motions from the side of body to the chest, head or abdomen, and those between head, chest and abdomen. Note that we do
+not consider the case where the hand moves from head, chest, or abdomen to the side of the body as this is established as part of the
+posture classification.
 
 \begin{figure}[!t]
 	\centering
@@ -272,7 +277,7 @@ To deal with this challenge, we incorporate the body postures to improve the det
 are detected between two time points.} Note that {\systemname} not only counts the number of rollovers, but also reports the exact nature of the rollover event.
 
 
-\subsubsection{Micro body movement \ref{sec:microbo}}
+\subsubsection{Micro body movement \label{sec:microbo}}
 
 Besides major body movement, such as rollovers, there often are involuntary body movements that can affect sleep quality. With the deepening of sleep, limbs are extremely relaxed, and a little stimulus will produce trembling and micro beating. Such behavior is most likely to occur during the deep sleep stage and the REM stage~\cite{ancoli2003role,Jean2000Sleep}. Therefore, by detecting such micro body movements and distinguish them from large body movements can help us to further analyze the user's sleep stage. In this paper, we are interested in the sleep-related body movements including hand moving, arm raising, and body trembling.
 
