@@ -30,8 +30,9 @@
 \subsection{Training Data\label{sec:trainingdata}}
 \textcolor{cyan}{ The training examples used to train our algorithms and to determine the algorithm parameters are collected from 10 users
 (5 males and 5 females), aging between 16 and 60. Our testing users were asked to wear a smartwatch to sleep and collected the sensor data
-while they were sleeping. Every testing user contributes 10 nocturnal sleep data over a two-week period. We stress that these users are
-different from those took part in our evaluation} (Section~\ref{sec:evalusers}).
+while they were sleeping. Every testing user contributes 10 nocturnal sleep data over a two-week period. The data were collected from the
+own bedroom of each of our testing users.  We stress that these users and the data collection environments are different from those took
+part in our evaluation} (Section~\ref{sec:evalusers}).
 
 \subsection{Detecting Sleep Postures and Movements}
 
@@ -606,16 +607,31 @@ Too much light exposure can shift our biological clock, which makes restful slee
 \cite{light2007}.  Besides, we also note that the dim light will affect our sleep too. According to the study \cite{light2016}, it can be
 learned that the dim artificial light during sleep is significantly associated with the general increase in fatigue, and the proper light
 can be used to increase the sense of exhaustion and promote sleep. So illumination condition in a sleeping environment has a significant
-influence on sleep. {\systemname} use the ambient light sensor to detect the illumination condition during sleep. We visit 10 volunteers'
-bedroom at night and the use of the ambient light sensor to test the lighting conditions in the bedroom, \textcolor{blue}{and we find that
-in the absence of light in the bedroom, the reading of the light sensor is basically maintained at 1Lux to 4Lux. In some cases, the watch's
-screen is awakened and lighted up to cause the light to rise to 4Lux; when the bedroom is in a faint light, such as a table lamp light, the
-light sensor's average readings are also maintained below 10Lux. So ultimately we will divide the illumination intensity into two
-conditions: bedroom without light (Weak illumination condition, $\leq$ 10Lux);  bedroom with strong lights (Strong illumination condition,
-$>$ 10Lux).} Therefore, we can learn the light conditions in the sleeping environment according to the two types of illumination
-conditions.
+influence on sleep. {\systemname} use the ambient light sensor to detect the illumination condition during sleep. We visit the bedroom of
+our ten testing users at night and the use of the ambient light sensor to test the lighting conditions in the bedroom. \textcolor{cyan}{We
+find that in the absence of lights in the bedroom, the light sensor reading is between 1 Lux to 4 Lux. In some cases, the light of the
+smartwatch screen can raise the light sensor reading to 4 Lux when the bedroom is dark. In other cases, when the bedroom has weak lights
+(e.g., when the bedroom is illuminated using a table lamp), the light sensor's average readings are below 10 Lux. Based on these
+observations, we divide the illumination intensity of the bedroom into two categories. When the bedroom has weak lights (i.e., the light
+sensor reading is no greater than 10 Lux), and when the bedroom has strong lights (i.e., the light sensor reading is greater than 10 Lux).}
+Using the threshold of 10 Lux, we can then map the light sensor readings to one of these two groups.
 
-However, the light sensor may be obscured, which leads to large errors in measuring the illumination level. For example, a user's smartwatch may be covered under quilt when he/she turned over unconsciously, and thus the illumination readings on the smartwatch may not reflect the real lighting situation. \textcolor{blue}{Previous work has used the smartphone to detect the illumination conditions and also encountered the situation where the light sensor was blocked. To deal with this problem, they chose to introduce another sensor in the smartphone, the proximity sensor,  to detect whether the light sensor is blocked or not. However, it does not apply in smartwatch because there is no proximity sensor.} To deal with this practical challenge, the key is that the illumination would drop suddenly when the smartwatch is covered by other objects. There are two possibilities for the sudden drop in light intensity. For most smartwatches, the light sensors are usually installed in the front face of it. The first case is the indoor lighting facilities are closed. The second case is the wrist turned so that the back of the hand become downward, thus blocking the light sensor in front of the smartwatch. \textcolor{blue}{In fact, this situation can easily occur. For example, when a user change sleeping posture to the left side, the user's hand may be close to the pillow with the palm facing up. Or there is a micro body movement like the hand movement so that the back of the hand become downward.} To avoid this erroneous illumination condition measurement, we detect whether the user is performing a wrist flip over a period of time during the intensity plummeting. We detect the wrist flip based on two aspects: (i) the rotation angle of smartwatch; (ii) whether the light intensity maintains stable after the sharp drop. If the wrist flips, we use the average of the previous light intensity as the intensity of the time period. It should be noted that, because the illumination condition detection algorithm is relatively simple, it is not explained in the experimental part.
+
+However, the light sensor may be obscured, which leads to large errors in measuring the illumination level. For example, a user's
+smartwatch may be covered under quilt when he/she turned over unconsciously, and thus the illumination readings on the smartwatch may not
+reflect the real lighting situation. \textcolor{cyan}{Previous work on smartphone-based light detections uses the proximity sensor
+\FIXME{\cite{}} to detect whether the light sensor is blocked or not. However, such an approach is not applicable to the off-the-shelf
+smartwatches because they typically do not have a proximity sensor.} To deal with this practical challenge, the key is that the
+illumination would drop suddenly when the smartwatch is covered by other objects. There are two possibilities for the sudden drop in light
+intensity. For most smartwatches, the light sensors are usually installed in the front face of it. The first case is the indoor lighting
+facilities are closed. The second case is the wrist turned so that the back of the hand become downward, thus blocking the light sensor in
+front of the smartwatch. \textcolor{cyan}{Such a situation often happens in real life. For examples, when a user changes the sleeping
+posture to the left side, his/her hand may be close to the pillow with the palm facing up; or the back of the hand may become downward
+because of a hand movement.} To avoid this erroneous illumination condition measurement, we detect whether the user is performing a wrist
+flip over a period of time during the intensity plummeting. We detect the wrist flip based on two aspects: (i) the rotation angle of
+smartwatch; (ii) whether the light intensity maintains stable after the sharp drop. If the wrist flips, we use the average of the previous
+light intensity as the intensity of the time period. It should be noted that, because the illumination condition detection algorithm is
+relatively simple, it is not explained in the experimental part.
 
 \subsection{Sleep stage and quality}
 \textcolor{blue}{Physiological communities often regard sleep as a cyclical process composed of three stages: rapid eye movement (REM) stage, light sleep stage and deep sleep stage. REM is an active period of sleep marked by intense brain activities and dream occurrence. Light sleep stage is a period of relaxation, when the heartbeat, breathing rate and muscle activity slow down. Deep sleep stage triggers hormones to promote body growth, as well as the repair and restoration of energy.  The biological characteristics of different sleep stages exhibit distinguishingly. In clinical sleep study, the sleep stages are mainly identified by simultaneously evaluating three fundamental measurement modalities including brain activities, eye movements, and muscle contractions. The EEG measure using electrodes placed around the scalp interpret various sleep/wake states of the brain. And, EMG and EOG using electrodes placed on the skin near the eyes and on the muscles, respectively, measures in deeply differentiating REM stage from all the other stages. But, apart from the implicit physiological activities, sleepers usually exhibit distinguishable physical activities in different sleep stages. For example, there are somniloquy and body trembles caused by frequent dreams generally appear in REM, large body movements such as body rollovers and arm raising happen in light sleep and micro body movements such as body trembling and snoring occur in deep sleep.  In the meanwhile, the breathing amplitude in NREM stage is larger compared with the REM stage. Moreover, sleep cycle usually repeats four to six times over a night. The sleeper usually experiences a transition from light sleep to deep sleep and then enters REM, but sometimes there is also possible a phenomenon of skipping some certain sleep stages occurs during sleep. However, despite this, dependence between two successive sleep stages still exists and different sleep stages have potential conversion probabilities, which also mentioned in Sleep Hunter \cite{gu2016sleep}. }
