@@ -42,7 +42,7 @@ posture and movements.  {\systemname}, currently supports the 4 basic sleep post
 movements. %These events comprehensively and highly relate to the sleep stages and quality.
 
 
-\subsubsection{\textcolor{cyan}{Sleep Posture Detection}\label{sec:sleeppdet}}
+\subsubsection{Sleep Posture Detection \label{sec:sleeppdet}}
 
 Dreaming and sleep quality are associated with underlying brain functions, which in turn are affected by body posture~\cite{posture2004}.
 Sleep posture also varies across individuals and should fit personal and physical needs of the individual~\cite{posture2016,posture2017}.
@@ -150,10 +150,10 @@ the rotation angles are significantly different from the readings given by movin
 due to the upward facing direction of the palm when the hand is placed on the head compared to the downward palm direction when the hand is
 placed the other positions. \systemname exploits this observation to detect if the hand is placed on the head by examining the changes of
 the title and rotation angles. To this end, we use a hierarchical classifier consisting of two KNN models (with $k=1$) to predict if the
-hand is moved to the head based on the tile and rotation angle readings. Specifically, we use the first KNN model to detect if the input
-tile angle reading is closest to one of our training samples where the palm was up placing. The training data for detecting the palm facing
-direction are collected from our pilot study users when their hands are placed on the head, the abdomen and the chest respectively. If the
-first KNN model suggests that the palm was placed upward, we then use the second KNN to take in the differences for the rotation readings
+hand is moved to the head based on the tilt and rotation angle readings. Specifically, we use the first KNN model to detect if the input
+tilt angle reading is closest to one of our training samples where the palm was up. The training data for detecting the palm facing
+direction are collected from our pilot study users when their hands are placed on the head, the abdomen and the chest respectively (see Sec.~\ref{sec:trainingdata}). If the
+first KNN model suggests that the palm was facing upward, we use the second KNN to take in the differences for the rotation readings
 (from the x, y, and z directions) before and after the hand movement. The second KNN model then checks if the input data are most similar
 to a training sample where the hand is placed on the head. The similarity is calculated by measuring the Euclidean distance from the input
 data to each of the training samples consisting of the rotation angle values from the three directions. Again, the training samples for the
@@ -230,7 +230,7 @@ described in the next paragraph to detect if it was placed on the abdomen or the
 
 If our hierarchical model predicts that the hand was not placed on the head, the hand could be located at anywhere including different
 parts of the body. Recall that we are interested at detecting if the hand is placed on three positions: the head, the abdomen and the
-chest. This means in addition to the head position model, we still need to find ways to detect if the hand was placed on the abdomen or the
+chest. This means in addition to the model for having the hand placed on the head, we still need to find ways to detect if the hand was placed on the abdomen or the
 chest. We found that the hand is likely to be affected by the breathing if it is placed on these two body locations. Specifically, the
  impact of breathing leads to periodical fluctuations on the accelerometer readings. This is because the hand will be pushed up and drop down because of
 breathing when it is placed on the abdomen or the chest. Our experimental data suggest that this is a unique behavior that is only observed
@@ -243,7 +243,7 @@ respiratory frequency. A match indicates that the hand is affected by a respirat
 either the abdomen or the chest. Fig. \ref{fig:PSD} provides an empirical evidence to support our design choice. It shows the PSG for one
 of our pilot study user when his hand was placed on the chest. Here we calculate the PSD for the accelerometer data collected from the x, y
 and z directions. We can see from the diagram that there is a large peak located at around 0.25Hz (highlighted in the diagrams) when a
-respiratory event is detected (which is labeled by watching the video). This peak corresponds to the average respiratory frequency of an
+respiratory event is detected (which was verified by video feed). This peak corresponds to the average respiratory frequency of an
 adult (0.2Hz to 0.47Hz)~\cite{Breath_frequence}, suggesting that the PSD reading can be used as a proxy to detect respiratory events.
 \systemname thus exploits the PSD to detect if the hand is placed on the abdomen or the chest by checking if there is any peak value of PSD
 falls within the range of 0.2Hz (corresponding to 12 breathes per minute) and 0.47Hz (corresponding to 28 breathes per minute).
@@ -270,7 +270,7 @@ on the abdomen as an example.
 
 
 
-    Even when the hand is placed on the abdomen, due to minor changes in the exact location of the user's hand, the location of intensity of
+Even when the hand is placed on the abdomen, due to minor changes in the exact location of the user's hand, the location of intensity of
 accelerometer fluctuations caused by respiration varies. Hence, we cannot use the amplitude information to determine true respiratory
 amplitude directly. This problem is illustrated in Fig.~\ref{fig:breath_ok1}, where (a) and (b) contain triaxial acceleration measurements
 at different locations of the abdomen during REM sleep stage, and in (c) which consists of acceleration data for NREM stages at the same
@@ -304,26 +304,26 @@ $\theta$, $\sigma$ and $\gamma$ are the x, y and z axis data of the orientation 
 
 The two graphs on the left of Fig.~\ref{fig:cordi} show the same acceleration data as has been used in (a) and (c) of
 Fig.~\ref{fig:breath_ok1}, respectively, whereas the two right-most graphs correspond to the data after coordinate system alignment.  We
-can see that prior to align the measurements, we cannot effectively distinguish the respiratory amplitude of REM and NREM stages from the
+can see that prior to aligning the measurements, we cannot effectively distinguish the respiratory amplitude of REM and NREM stages from the
 acceleration amplitude. After coordinate alignment, the respiratory amplitudes are clearly visible from the z-axis data. We then calculate
 the variance of z-axis acceleration and use it as a feature to measure the intensity of the fluctuation in a signal, with larger variance
 corresponding to greater breath amplitude. Note that we cannot use the sum or magnitude of the z-axis as a measure of intensity as the
 measurements remain affected by gravity.
 
-\textcolor{cyan}{ We use the respiratory amplitude to detect whether the user is at the REM or not. Specifically, we calculate the
-respiratory amplitude when the hand is found to be placed on the abdomen or the chest (\systemname can only detect respiratory events when
+ We use respiratory amplitude to detect whether the user is in the REM stage or not. Specifically, we calculate the
+respiratory amplitude when the hand is found to be placed on the abdomen or the chest (as \systemname operates using a wrist worn device, it can only detect respiratory events when
 the hand is placed one of these two positions). We then use a KNN classifier to find from our training examples, which training example is
 most similar to the input respiratory amplitudes collected from the x, y, and z directions. The similarity is measured by calculating the
 Euclidean distance on the 3-dimensional feature space. We then use the label (either REM or NREM) associated with the nearest training
-example as the classification outcome.}
+example as the classification outcome.
 
-\textcolor{cyan}{ To generate the training examples, we first use our hand position recognition algorithm described in
-Section~\ref{sec:handpr} to detect, from our training dataset (see (Section~\ref{sec:trainingdata}), wheter the hand was placed on the
-abdomen or the chest to calculate the respiratory amplitude. We can consider the user is at either (1) the NREM stage if a large repository
-amplitude (i.e., the amplitude value is not less than 15) is detected, or (2) the REM stage if a normal repository amplitude (i.e., the
-amplitude value is not greater than 4) is detected. These thresholds are chosen based on prior study\FIXME{ \cite{}}. To remove the noises
-of the training data, we only use training examples where both our approach and Fitbit reach the consensus on the eye movement stage. We
-also manually inspect the recorded videos to label the stage from our training data.}
+%To generate the training examples, we first use our hand position recognition algorithm described in
+%Section~\ref{sec:handpr} to detect, from our training dataset (see (Section~\ref{sec:trainingdata}), whether the hand was placed on the
+%abdomen or the chest to calculate the respiratory amplitude. We can consider the user is at either (1) the NREM stage if a large repository
+%amplitude (i.e., the amplitude value is not less than 15) is detected, or (2) the REM stage if a normal repository amplitude (i.e., the
+%amplitude value is not greater than 4) is detected. These thresholds are chosen based on prior study\FIXME{ \cite{}}. To remove the noises
+%of the training data, we only use training examples where both our approach and Fitbit reach the consensus on the eye movement stage. We
+%also manually inspect the recorded videos to label the stage from our training data.
 
 
 
@@ -349,12 +349,12 @@ can also help us to classify the sleep stage~\cite{rollover2007}. In general, th
 the supine posture and lateral (left or right) posture, and two posture transitions between the left lateral posture and right lateral
 posture. Fig. \ref{fig:BodyRollover} shows the case when the body moves from the left side to the right side.
 %
-\textcolor{cyan}{The most intuitive way for detecting body rollover events is to estimate the rotation direction of the arm based on the
+The most intuitive way for detecting body rollover events is to estimate the rotation direction of the arm based on the
 rotation angle given by the gyroscope. However, doing so is non-trivial because different users can exhibit drastically different patterns
 for arm rotations; and the subtle changes in the starting arm position for the same sleeping posture could lead to a misprediction. As an
 alternative to the rotation angle, we find that the tilt angles to be useful for this task because they strongly correlate to a body
 rollover event. This correlation thus enables us to effectively translate the change of the tilt angle to a body rollover event to count
-the occurrence of such events.} Specifically, the angle values of three different axes are on the falling edge or rising edge
+the occurrence of such events. Specifically, the angle values of three different axes are on the falling edge or rising edge
 simultaneously during a very short time period. Fig. \ref{fig:LeftToRight} -- Fig. \ref{fig:RightToLeft} shows the value changes under
 different body rollover cases. To this end, a naive method to detect rollovers would be to rely on changes in angle measurements. However,
 this method suffers a very large error since other hand movements will also induce a similar change.
@@ -399,9 +399,9 @@ this method suffers a very large error since other hand movements will also indu
 To deal with this challenge, we incorporate the body postures to improve the detection accuracy. As shown in Fig. \ref{fig:BodyRollover},
 the body postures are different before and after the rollover. Therefore, after we detect the time when the angle values changes, we term
 the time as a possible rollover time point. Then we use the sleep posture classification algorithm to determine whether the body postures
-are the same or not over a period of time before and after this point. \textcolor{cyan}{If the postures are the same, we exclude this time
+are the same or not over a period of time before and after this point. If the postures are the same, we exclude this time
 point, otherwise a body rollover event is found. In other words, a body rollover event is recorded when the posture changes are detected
-between two time points.} Note that {\systemname} not only counts the number of rollovers, but also reports the exact nature of the
+between two time points. Note that {\systemname} not only counts the number of rollovers, but also reports the exact nature of the
 rollover event.
 
 
@@ -409,11 +409,11 @@ rollover event.
 
 Besides major body movement, such as rollovers, there often are involuntary body movements that can affect sleep quality. With the deepening of sleep, limbs are extremely relaxed, and a little stimulus will produce trembling and micro beating. Such behavior is most likely to occur during the deep sleep stage and the REM stage~\cite{ancoli2003role,Jean2000Sleep}. Therefore, by detecting such micro body movements and distinguish them from large body movements can help us to further analyze the user's sleep stage. In this paper, we are interested in the sleep-related body movements including hand moving, arm raising, and body trembling.
 
-\textcolor{cyan}{One of the challenges in detecting the micro-body movements is to cancel the inherent noises brought by the accelerometer.
+One of the challenges in detecting the micro-body movements is to cancel the inherent noises brought by the accelerometer.
 To cancel the noises, we apply a moving window to the collected accelerometer data points to minimize the impact of the outliers. To
 determine the size of the moving window, we apply different parameter settings to our training data. We found that a moving widow with a
 size of 35 gives the best average results on our training set. Therefore, we choose to apply a moving window of 35 sample points to the
-collected user data and then calculate Root Sum Square (RSS) for the data points within a window:}
+collected user data and then calculate Root Sum Square (RSS) for the data points within a window:
 
 \begin{equation}
       Rss(t) =\sqrt{(acc_x(t))^{2}+(acc_y(t))^{2}+(acc_z(t))^{2}},
@@ -421,7 +421,7 @@ collected user data and then calculate Root Sum Square (RSS) for the data points
 $acc_x(t)$, $acc_y(t)$ and $acc_z(t)$ represent the accelerometer sample value of x-axis, y-axis and z-axis at time stamp t respectively.
 
 
-\textcolor{cyan}{We can obtain the first-order derivative of from the RSS values:}
+We can obtain the first-order derivative of from the RSS values:
 \begin{equation}
       V(t)=Rss(t)-Rss(t-1).
 \end{equation}
@@ -430,7 +430,7 @@ Eventually, we set the threshold to be 0.03, which can achieve a satisfactory de
 However, in our body rollover experiments, we find that the average movement duration is 3 s, as shown in Fig. \ref{fig:LeftToRight} - Fig. \ref{fig:RightToLeft}.
 Therefore, we can first divide the body movement events into large movement and micro movement by detecting the signal duration time.
 
-\textcolor{cyan}{To distinguish among the micro-body movements of hand movement, arm raising and body trembling, we first consider the
+To distinguish among the micro-body movements of hand movement, arm raising and body trembling, we first consider the
 duration of the movement. We observe from our training data that an arm rising action typically takes around 1.8 second, while a hand
 movement and a body trembling take around 1 second. Using the duration of the movement, we can distinguish arm rising from the other two
 movements. We also find that the body trembling tends to lead to a more drastic change in the accelerometer readings compared to the hand
@@ -439,7 +439,7 @@ then use the change of accelerometer reading to distinguish between the body tre
 first-order derivative of accelerometer data to find out the peak of the acceleration data.  If the peak is great than 1.5 and the duration
 of the movement took between 0.8 and 1.2 second, a body trembling is detected; if the peak is less than 1 and the duration of the movement
 took between 0.8 and 1.2 second, a hand movement is detected; otherwise, if the duration of the movement took between 1.5 and 2 second, an
-arm rising is detected. These thresholds are empirically determined from our training data.}
+arm rising is detected. These thresholds are empirically determined from our training data.
 
 %\textcolor{blue}{In order to distinguish micro-body movements, including hand movement, arm raising and body trembling, it is very
 %intuitive to detect based on the duration of the movement, because we find that the durations of these movements are significantly
@@ -473,9 +473,9 @@ example, snore is one of the possible symptoms of cerebral infarction patients. 
 health and sleep. It can cause behind sleep apnea or narcolepsy, a sleeping disorder~\cite{snoring2016,snoring2013}. And when there is a
 cough, the human cerebral cortex cells are always in an excited state, limiting the depth of sleep, allowing only short sleep between
 wakefulness, like many other sleep disruptions. {\systemname} can detect these different acoustic events, including snore, cough and
-somniloquy. \textcolor{cyan}{ Classical acoustic algorithms use multi-dimensional features to detect acoustic events from a complex
+somniloquy. \ Classical acoustic algorithms use multi-dimensional features to detect acoustic events from a complex
 environment~\cite{gu2016sleep}. By contrast, We tailor our design to the problem domain to derive a simpler yet effective acoustic
-detection algorithm, by exploiting the characteristics of the different events that we target.}
+detection algorithm, by exploiting the characteristics of the different events that we target.
 
 \begin{figure*}[!t]
 \centering
@@ -521,10 +521,10 @@ In conclusion, the ``interval'', ``duration'' and ``frequency'' of acoustic even
 
 Traditional end-point detection algorithm \cite{stowell2015detection}, however, uses a fixed double threshold and must be obtained by a
 large number of data samples, which has two drawbacks. First, the fixed double threshold may cause error detection at the beginning of
-acoustic event. Second, the requirement of a large number of data samples would lead to large system latency. \textcolor{cyan}{To address
+acoustic event. Second, the requirement of a large number of data samples would lead to large system latency. To address
 these issues, we develop a detection method that does not require pre-sampling to obtain the optimal thresholds. Instead, our algorithm
 estimates the thresholds on a per signal basis. This strategy not only reduces the number of data samples needed, but also leads to a
-higher accuracy. }
+higher accuracy. 
 
 Specifically, since the first few frames and the last few frames are mostly mute or are the background noise, we select the first five
 frames and the last five frames to calculate their short-term energy, which are denoted as $E_s$ and $E_e$, respectively. And then the two
@@ -542,14 +542,12 @@ So we can use $EH$ and $EL$ to represent the high and low threshold of short-ter
 \begin{equation}
     EL=\beta \times DE+E_n,
 \end{equation}
+where $\alpha$ and $\beta$ are the multiplier factors of the energy value $DE$.
 
- \textcolor{cyan}{where $\alpha$ and $\beta$ are the multiplier factors of the energy value $DE$.}
 
-
-\textcolor{cyan}{ Here, we need to choose the right values for $\alpha$ and $\beta$ to ensure
+Here, we need to choose the right values for $\alpha$ and $\beta$ to ensure
  that we can accurately detect the start and end points of a speech signal. To that end, we use the nighttime sound data from our training dataset to determine $\alpha$ and $\beta$.
  Specifically, we tested $\alpha$ using values ranging between 0.1 and 0.5, and $\beta$ using values ranging between 0.01 and 0.09. We found that setting $\alpha$ to  0.1 and $\beta$ to  0.06 gives the best overall results in our training dataset.
- }
 
  Moreover, in order to avoid the interference of sudden noise, we set the minimum length of the signal segment and count the length of the signal during the search for the start and end point. Finally, if the signal length is less than the set minimum, it is considered as a noise segment. The results of the start-point and end-point detection are shown in Fig. \ref{acoustic}, we calculate the length of each speech segment and calculate their averages as the duration of the acoustic event. Last, we count the number of peak points to determine whether it meets the third key observation or not.
 
@@ -606,35 +604,36 @@ Too much light exposure can shift our biological clock, which makes restful slee
 learned that the dim artificial light during sleep is significantly associated with the general increase in fatigue, and the proper light
 can be used to increase the sense of exhaustion and promote sleep. So illumination condition in a sleeping environment has a significant
 influence on sleep. {\systemname} use the ambient light sensor to detect the illumination condition during sleep. We visit the bedroom of
-our ten testing users at night and the use of the ambient light sensor to test the lighting conditions in the bedroom. \textcolor{cyan}{We
+our ten testing users at night and the use of the ambient light sensor to test the lighting conditions in the bedroom. We
 find that in the absence of lights in the bedroom, the light sensor reading is between 1 Lux to 4 Lux. In some cases, the light of the
 smartwatch screen can raise the light sensor reading to 4 Lux when the bedroom is dark. In other cases, when the bedroom has weak lights
 (e.g., when the bedroom is illuminated using a table lamp), the light sensor's average readings are below 10 Lux. Based on these
 observations, we divide the illumination intensity of the bedroom into two categories. When the bedroom has weak lights (i.e., the light
-sensor reading is no greater than 10 Lux), and when the bedroom has strong lights (i.e., the light sensor reading is greater than 10 Lux).}
+sensor reading is no greater than 10 Lux), and when the bedroom has strong lights (i.e., the light sensor reading is greater than 10 Lux). 
 Using the threshold of 10 Lux, we can then map the light sensor readings to one of these two groups.
 
 
 However, the light sensor may be obscured, which leads to large errors in measuring the illumination level. For example, a user's
 smartwatch may be covered under quilt when he/she turned over unconsciously, and thus the illumination readings on the smartwatch may not
-reflect the real lighting situation. \textcolor{cyan}{Previous work on smartphone-based light detections uses the proximity sensor
-\FIXME{\cite{}} to detect whether the light sensor is blocked or not. However, such an approach is not applicable to the off-the-shelf
-smartwatches because they typically do not have a proximity sensor.} To deal with this practical challenge, the key is that the
+reflect the real lighting situation. Most of the previous works on smartphone-based light detection have used the proximity sensor
+to detect whether the light sensor is blocked or not. However, such an approach is not applicable to the off-the-shelf
+smartwatches because they typically do not have a proximity sensor.  To deal with this practical challenge, the key is that the
 illumination would drop suddenly when the smartwatch is covered by other objects. There are two possibilities for the sudden drop in light
 intensity. For most smartwatches, the light sensors are usually installed in the front face of it. The first case is the indoor lighting
 facilities are closed. The second case is the wrist turned so that the back of the hand become downward, thus blocking the light sensor in
-front of the smartwatch. \textcolor{cyan}{Such a situation often happens in real life. For examples, when a user changes the sleeping
+front of the smartwatch. Such a situation often happens in real life. For examples, when a user changes the sleeping
 posture to the left side, his/her hand may be close to the pillow with the palm facing up; or the back of the hand may become downward
-because of a hand movement.} To avoid this erroneous illumination condition measurement, we detect whether the user is performing a wrist
+because of a hand movement. To avoid this erroneous illumination condition measurement, we detect whether the user is performing a wrist
 flip over a period of time during the intensity plummeting. We detect the wrist flip based on two aspects: (i) the rotation angle of
 smartwatch; (ii) whether the light intensity maintains stable after the sharp drop. If the wrist flips, we use the average of the previous
 light intensity as the intensity of the time period. It should be noted that, because the illumination condition detection algorithm is
 relatively simple, it is not explained in the experimental part.
 
 \subsection{Sleep stage and quality}
-\textcolor{blue}{Physiological communities often regard sleep as a cyclical process composed of three stages: rapid eye movement (REM) stage, light sleep stage and deep sleep stage. REM is an active period of sleep marked by intense brain activities and dream occurrence. Light sleep stage is a period of relaxation, when the heartbeat, breathing rate and muscle activity slow down. Deep sleep stage triggers hormones to promote body growth, as well as the repair and restoration of energy.  The biological characteristics of different sleep stages exhibit distinguishingly. In clinical sleep study, the sleep stages are mainly identified by simultaneously evaluating three fundamental measurement modalities including brain activities, eye movements, and muscle contractions. The EEG measure using electrodes placed around the scalp interpret various sleep/wake states of the brain. And, EMG and EOG using electrodes placed on the skin near the eyes and on the muscles, respectively, measures in deeply differentiating REM stage from all the other stages. But, apart from the implicit physiological activities, sleepers usually exhibit distinguishable physical activities in different sleep stages. For example, there are somniloquy and body trembles caused by frequent dreams generally appear in REM, large body movements such as body rollovers and arm raising happen in light sleep and micro body movements such as body trembling and snoring occur in deep sleep.  In the meanwhile, the breathing amplitude in NREM stage is larger compared with the REM stage. Moreover, sleep cycle usually repeats four to six times over a night. The sleeper usually experiences a transition from light sleep to deep sleep and then enters REM, but sometimes there is also possible a phenomenon of skipping some certain sleep stages occurs during sleep. However, despite this, dependence between two successive sleep stages still exists and different sleep stages have potential conversion probabilities, which also mentioned in Sleep Hunter \cite{gu2016sleep}. }
 
-\textcolor{blue}{Thus, based on these features, we build a Hidden Markov Model \cite{johnson2010hidden}. And we use a series of sleep events as the observed sequence and the sleep stage as the implicit stage sequence. $obs_t={NB(t),NB_M(t),BA(t),NA(t)}$ represents the feature vector at detection phase t. The explanation of each item, which is the input of HMM, is listed as follows. $NB(t)$: the number of occurrences of body rollover during the detection phase t. $NB_M(t)$: the number of occurrences of micro body movement. $BA(t)$: the measurement of  respiratory amplitude. $NA(t)$:the number of occurrences acoustic events. And $states_t$ =$\{$light sleep; deep sleep; REM$\}$ is an output of our model, which represents the sleep stage in the detection phase t. In the training of the HMM model, we used nocturnal sleep data from 10 volunteers who participated in the training parameters of each algorithm and make their sleep-related events as observation sequences and the corresponding sleep stages detected by Fitbit as hidden state sequences, to generate HMM models. Specifically, we first use maximum likelihood estimation method for parameter estimation, the state transition matrix and the confusion matrix, and then use the Viterbi algorithm [38] to acquire a series of implicit state sequences corresponding to observed sequence.} As a result, we can estimate the sleep stage during a time window. Finally, we can get the durations of all sleep stages over the whole sleep process.
+Sleep is generally considered as a cyclical physiological process composed of three stages: rapid eye movement (REM) stage, light sleep stage and deep sleep stage. REM is an active period of sleep marked by intense brain activities and dream occurrence. Light sleep stage is a period of relaxation, when the heartbeat, breathing rate and muscle activity slow down. Deep sleep stage triggers hormones to promote body growth, as well as the repair and restoration of energy.  The biological characteristics of different sleep stages exhibit distinguishingly. In clinical sleep study, the sleep stages are mainly identified by simultaneously evaluating three fundamental measurement modalities including brain activities, eye movements, and muscle contractions. The EEG measure using electrodes placed around the scalp interpret various sleep/wake states of the brain. And, EMG and EOG using electrodes placed on the skin near the eyes and on the muscles, respectively, measures in deeply differentiating REM stage from all the other stages. But, apart from the implicit physiological activities, sleepers usually exhibit distinguishable physical activities in different sleep stages. For example, there are somniloquy and body trembles caused by frequent dreams generally appear in REM, large body movements such as body rollovers and arm raising happen in light sleep and micro body movements such as body trembling and snoring occur in deep sleep.  In the meanwhile, the breathing amplitude in NREM stage is larger compared with the REM stage. Moreover, sleep cycle usually repeats four to six times over a night. The sleeper usually experiences a transition from light sleep to deep sleep and then enters REM, but sometimes there is also possible a phenomenon of skipping some certain sleep stages occurs during sleep. However, despite this, dependence between two successive sleep stages still exists and different sleep stages have potential conversion probabilities, which also mentioned in Sleep Hunter \cite{gu2016sleep}.
+
+To separate between these states, we build a Hidden Markov Model~\cite{johnson2010hidden} for identifying the current sleep stage of the user. As the input, i.e., the observed states, we use series of detected sleep events and the sleep stage sequence is modelled as a hidden state, i.e., $obs_t={NB(t),NB_M(t),BA(t),NA(t)}$ represents the feature vector at detection phase t. The explanation of each item, which is the input of HMM, is listed as follows. $NB(t)$: the number of occurrences of body rollover during the detection phase t. $NB_M(t)$: the number of occurrences of micro body movement. $BA(t)$: the measurement of  respiratory amplitude. $NA(t)$:the number of occurrences acoustic events. And $states_t$ =$\{$light sleep; deep sleep; REM$\}$ is an output of our model, which represents the sleep stage in the detection phase t. In the training of the HMM model, we used nocturnal sleep data from 10 volunteers who participated in the training parameters of each algorithm and make their sleep-related events as observation sequences and the corresponding sleep stages detected by Fitbit as hidden state sequences, to generate HMM models. Specifically, we first use maximum likelihood estimation method for parameter estimation, the state transition matrix and the confusion matrix, and then use the Viterbi algorithm to acquire a series of implicit state sequences corresponding to observed sequence.  As a result, we can estimate the sleep stage during a time window. Finally, we can get the durations of all sleep stages over the whole sleep process.
 
 Further, to quantize the quality of a sleep, we use the Sleep Quality Report model introduced in \cite{gu2016sleep}. Let $SQ$ be the value of the sleep quality, then $SQ$ is given as follow:
  \begin{equation}
