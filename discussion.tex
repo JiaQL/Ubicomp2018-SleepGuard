@@ -15,7 +15,7 @@ In this paper, we have shown that sensors available on off-the-shelf smartwatche
   \item \textbf{Limitations of the algorithm.}
   When we try to detect sleep posture, we find a corresponding relationship between the position of the arm and the sleeping posture, so we indicate the sleeping posture by detecting its position. But currently we consider some specific positions of the arm in the four sleeping positions, some unusual arm's positions are ignored by us and that is something we need to improve further in future work.
 
-  \textcolor{cyan}{\item \textbf{Limitations of single wrist sensor.} 
+  \item \textcolor{cyan}{\textbf{Limitations of single wrist sensor.} 
   	{\systemname} uses the sensory data of only one wrist, it will lose efficiency for detecting specific events of the other wrist. Even so, it can achieve accurate sleep quality assessment result. Actually, although movement patterns of the left and right wrist are different during sleep, the technique used for detecting sleep
   	related behaviors is the same. Some sleep related events like the sleep posture, body rollover, acoustic events, illumination
   	conditions, are not affected by different wrists. The reason is that these events are related to the entire body rather than the part
@@ -25,7 +25,7 @@ In this paper, we have shown that sensors available on off-the-shelf smartwatche
   	probability and frequency are different on different hands. However, the degree of impact on our detection performance varies from
   	person to person and can be largely cancelled through calibration. This is where we need to measure and consider in our future work. }
 
-  \textcolor{cyan} {\item \textbf{Comparing to Fitbit.} In addition, when we use Fitbit as groundtruth, Fitbit is worn on a different
+  \item\textcolor{cyan} {\textbf{Comparing to Fitbit.} In addition, when we use Fitbit as groundtruth, Fitbit is worn on a different
       wrist from {\systemname}. However, from the analysis of the basic principles of sleep stage detected by {\systemname} and Fitbit,
       it can be found that this does not have much effect on our assessment of the results. Both Fitbit and {\systemname} have common
       grounds for detecting sleep stages based on acoustic events, the occurrence and frequency of physical activity, but we go further
@@ -39,7 +39,7 @@ In this paper, we have shown that sensors available on off-the-shelf smartwatche
       sleep is as uncomfortable as possible, we choose to make Fitbit and Smartwatch are worn on different hands. }
 
 
-  \textcolor{cyan}{\item \textbf{Multiple-sleeper scenario.} Currently, {\systemname} considers that the user is sleeping alone, but
+  \item\textcolor{cyan}{\textbf{Multiple-sleeper scenario.} Currently, {\systemname} considers that the user is sleeping alone, but
   there are still more complicated situations in reality, such as sleeping with a bed partner, baby, and/or a pet. However, because
   {\systemname} is based on the detection of smartwatch, Unlike smartphone placed on the bed, it can show more sensitivity to the user's
   own activities. Therefore, for the detection performance of sleeping posture, body rollover and hand position events has almost no
@@ -52,10 +52,9 @@ In this paper, we have shown that sensors available on off-the-shelf smartwatche
   event or the sound of the bed partner. In addition, the related acoustic events of the bed partner can also be considered as a factor
   affecting the user's sleep.}
 
-  \textcolor{cyan}{\item \textbf{An occurrence probability of unusual arm's positions.} We detect sleep posture based on arm's positions
+  \item \textcolor{cyan}{\textbf{An occurrence probability of unusual arm's positions.} We detect sleep posture based on arm's positions
   and focus on three specific positions when detecting the position of the hand. In sleep position detection, we are based on the
-  assumption that between the user's arms position and sleeping postures that the arms have common and (reasonably) stable positions in
-  each posture and we consider as many possible arm positions as possible in four sleeping postures, which are the most common arm's
+  assumption that between the user's arms position and sleeping postures that the arms have common and (reasonably) stable positions in each posture and we consider as many possible arm positions as possible in four sleeping postures, which are the most common arm's
   positions for users during sleep. In hand position detection, we chose the three most representative locations that do have an impact
   on sleep and health. But we know that not all users or a user will not have these common positions all the time. These unusual arm's
   positions may cause the performance of our sleep posture detection algorithm to degrade. But of the 15 participants we tested, we can
